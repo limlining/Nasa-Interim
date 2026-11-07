@@ -87,8 +87,6 @@
     .badge[data-v="over"] { color: var(--warn); border-color: var(--warn); }
     .addrow { width: 100%; margin-top: 10px; min-height: 48px; background: none; border: 2px dashed var(--line); font-weight: 600; cursor: pointer; color: var(--mute); }
     .addrow:hover { border-color: var(--ink); color: var(--ink); }
-    .how { margin-top: 20px; font-size: 13px; color: var(--mute); }
-    .how b { color: var(--ink); }
 
     /* Run View & Vitals */
     .runtop { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
@@ -138,8 +136,6 @@
     .bar.b[data-s="warn"] i { background: var(--warn); }
     .bar.b[data-s="crit"] i { background: var(--crit); }
     .bn { float: right; font: 500 12px var(--font-m); color: var(--ink); letter-spacing: 0; text-transform: none; }
-    .crow { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 6px; font-size: 13.5px; }
-    .cb { display: flex; gap: 14px; }
 
     .comm.dead { border: 2px dashed var(--crit); }
     .comm.dead .cd { color: var(--crit); animation: blink 1.6s steps(2,jump-none) infinite; }
@@ -148,20 +144,12 @@
     .bar.dead i, .bar.dead::after { display: none; }
     @keyframes blink { 50% { opacity: .35; } }
 
-    .mini { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
-    .mini button { min-height: 46px; background: var(--panel); border: 1px solid var(--ink); font-weight: 500; font-size: 13px; cursor: pointer; padding: 0 2px; }
-    .mini button[disabled] { background: var(--ink); color: var(--bg); cursor: default; }
-
-    /* Results */
+    /* Results Comparison */
     .cmp { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid var(--ink); background: var(--panel); }
     .cmp > div { padding: 11px 12px; min-width: 0; }
     .cmp > div + div { border-left: 2px solid var(--ink); }
     .cmp .big { font: 600 24px/1.2 var(--font-b); margin: 4px 0 6px; overflow-wrap: anywhere; }
     .cmp p { font-size: 13.5px; line-height: 1.5; margin-top: 8px; color: var(--mute); }
-    .cmp dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin-top: 10px; font: 400 12px var(--font-m); color: var(--mute); }
-    .cmp dd { text-align: right; color: var(--ink); }
-    .cmp.nosig { background: repeating-linear-gradient(135deg, transparent 0 8px, var(--hatch) 8px 10px); margin: -11px -12px; padding: 11px 12px; height: calc(100% + 22px); }
-    .cmp.nosig .big { color: var(--crit); font-family: var(--font-m); font-size: 20px; }
 
     .verdict { margin-top: 10px; padding: 10px 12px; border: 2px solid; font-weight: 600; }
     .verdict[data-v="match"], .verdict[data-v="ok"] { color: var(--ok); }
@@ -174,13 +162,10 @@
     .step input { appearance: none; -webkit-appearance: none; width: 26px; height: 26px; margin: 0; border: 2px solid var(--ink); background: var(--panel); display: grid; place-items: center; cursor: pointer; }
     .step input:checked { background: var(--ink); }
     .step input:checked::after { content: ""; width: 12px; height: 6px; border-left: 3px solid var(--bg); border-bottom: 3px solid var(--bg); transform: rotate(-45deg) translate(1px,-1px); }
+    .step input:disabled { opacity: 0.6; cursor: not-allowed; }
+    .step input:checked + span { opacity: .55; text-decoration: line-through; }
     .step b { display: block; font-size: 15px; }
     .step span span { display: block; font-size: 13px; color: var(--mute); }
-    .step input:checked + span { opacity: .55; }
-    .esc { margin-top: 10px; padding: 9px 12px; border: 1px solid var(--crit); color: var(--crit); font-size: 13px; }
-    .rec { border: 2px solid var(--accent); padding: 9px 12px; margin-top: 6px; }
-    .rec b { display: block; }
-    .rec p { font-size: 13px; color: var(--mute); margin-top: 2px; }
 
     /* Log & Profile */
     .logrow { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 4px 10px; padding: 11px 0; border-bottom: 1px solid var(--line); }
@@ -195,10 +180,6 @@
     .gauge::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; border-left: 2px solid var(--ink); }
     .gauge .dot { position: absolute; top: -8px; bottom: -8px; width: 6px; margin-left: -3px; background: var(--crit); }
     .gl { display: flex; justify-content: space-between; gap: 6px; font: 500 11px var(--font-m); color: var(--mute); }
-    .dist { display: grid; grid-template-columns: 92px 1fr 24px; gap: 10px; align-items: center; margin-top: 8px; font-size: 13.5px; }
-    .dist .bar { height: 12px; }
-    .dist .bar i { background: var(--ink); }
-    .dist em { font: 500 12px var(--font-m); font-style: normal; text-align: right; }
     .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 14px; }
     .stats div { background: var(--panel); padding: 8px 10px; }
     .stats b { display: block; font: 500 22px var(--font-m); }
@@ -208,7 +189,6 @@
     .f { display: grid; gap: 12px; }
     .f label { display: grid; gap: 4px; }
     .f input, .f select, .f textarea { width: 100%; min-height: 44px; background: var(--panel); color: var(--ink); border: 2px solid var(--ink); padding: 8px 10px; font: inherit; border-radius: 0; }
-    .f textarea { min-height: 84px; resize: vertical; }
     .f .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
     /* Bottom Nav */
@@ -217,23 +197,24 @@
     .nav button { background: none; border: 0; min-height: 54px; cursor: pointer; font: 600 13px var(--font-d); letter-spacing: .14em; text-transform: uppercase; }
     .nav button[aria-current="page"] { background: var(--ink); color: var(--bg); }
 
-    /* 身体部位高亮动画样式 */
+    /* Body Map & Daily Check */
     .body-map-container { text-align: center; margin: 10px 0; }
-    .human-body-svg { height: 120px; }
+    .human-body-svg { height: 120px; cursor: pointer; }
+    .body-part-clickable { fill: var(--line); opacity: 0.5; transition: all .2s; }
+    .body-part-clickable:hover { fill: var(--accent); opacity: 0.9; }
+    .body-part-clickable.active { fill: var(--crit); opacity: 1; }
     .pulse-spot { fill: var(--crit); opacity: 0.8; animation: pulse 1.2s infinite ease-in-out; display: none; }
     @keyframes pulse {
       0% { transform: scale(1); opacity: 0.4; }
       50% { transform: scale(1.15); opacity: 1; fill: var(--crit); }
       100% { transform: scale(1); opacity: 0.4; }
     }
-    /* Body Map 点击高亮样式 */
-    .body-part-clickable { fill: var(--line); opacity: 0.5; transition: all .2s; }
-    .body-part-clickable:hover { fill: var(--accent); opacity: 0.9; }
-    .body-part-clickable.active { fill: var(--crit); opacity: 1; }
+
     .daily-check { background: var(--panel); border: 1px solid var(--accent); padding: 12px; margin-bottom: 16px; }
     .daily-check h3 { font: 600 14px var(--font-d); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
     .daily-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
     .daily-btns button { padding: 8px; border: 1px solid var(--ink); background: var(--bg); font: 600 12.5px var(--font-b); cursor: pointer; }
+    .daily-btns button:hover { background: var(--ink); color: var(--bg); }
   </style>
 </head>
 <body>
@@ -260,8 +241,7 @@
 
   var S = {
     view: 'home', blackout: false, speed: 12, log: saved.log || [],
-    custom: saved.custom || [], run: null, armClear: false,
-  bodyFilter: null
+    custom: saved.custom || [], run: null, armClear: false, bodyFilter: null
   };
 
   var HAZ = [
@@ -384,7 +364,6 @@
 
   function allSc() { return SC.concat(S.custom.map(gen)); }
   function findSc(id) { return allSc().filter(function(s){return s.id === id;})[0]; }
-  function firstSentence(s) { var i = s.indexOf('.'); return i > -1 ? s.slice(0, i + 1) : s; }
 
   var VT = {match:'Matches ground', ok:'Acceptable', late:'Too slow', over:'Overreaction'};
   var STL = {ok:'Normal', warn:'Caution', crit:'Danger'};
@@ -450,7 +429,7 @@
     if (nx === 'result') finish(arg || 'reply');
     r.phase = nx;
     render();
-    var p = $('#phase'); if (p && nx === 'result') p.scrollIntoView({block:'start'});
+    var p = $('#phase'); if (p && nx === 'result') p.scrollIntoView({block: 'start'});
   }
 
   function finish(reason) {
@@ -500,11 +479,10 @@
     var r = S.run; if (!r) return;
     r.sc.vit.forEach(function(v, i) {
       var el = $('#v' + i); if (!el) return;
-      var x = +r.vals[i].toFixed(v.dp), s = stat(v, x), d = r.base[i] - v.start;
-      var ar = Math.abs(d) >= Math.max(.5, Math.abs(v.start) * .015) ? (d > 0 ? ' ↑' : ' ↓') : '';
+      var x = +r.vals[i].toFixed(v.dp), s = stat(v, x);
       el.dataset.s = s;
       $('b', el).textContent = fmt(v, r.vals[i]);
-      $('.st', el).textContent = STL[s] + ar;
+      $('.st', el).textContent = STL[s];
       $('path', el).setAttribute('d', spark(r.hist[i]));
     });
     if (r.phase === 'wait') {
@@ -514,170 +492,105 @@
       $('#bv').textContent = Math.round(r.budget);
       $('#bBar').style.width = r.budget + '%';
       $('#bBar').parentElement.dataset.s = r.budget > 60 ? 'ok' : r.budget > 30 ? 'warn' : 'crit';
-      var al = $('#alert');
-      if (al) al.hidden = !(r.cur < 3 && r.budget < 70 && r.seg.rate >= 2.5);
     }
   }
-
-  function mean(a) { return a.length ? a.reduce(function(x, y) { return x + y; }, 0) / a.length : 0; }
-
-  function prof() {
-    var L = S.log.filter(function(e) { return !e.aided; });
-    if (L.length < 3) return null;
-    var avg = mean(L.map(function(e) { return e.diff; }));
-    var late = L.filter(function(e) { return e.v === 'late'; }).length;
-    var over = L.filter(function(e) { return e.v === 'over'; }).length;
-    var good = L.filter(function(e) { return e.v === 'match' || e.v === 'ok'; }).length;
-    var type, title, text;
-    if (avg <= -.4) {
-      type = 'wait'; title = 'You tend to over-wait';
-      text = 'When symptoms get worse, you more often choose to sit and watch. For fast-moving problems, escalate first.';
-    } else if (avg >= .4) {
-      type = 'over'; title = 'You tend to over-react';
-      text = 'You reach for escalation quickly. Ask first: can rest and fluids come first?';
-    } else if (late && over) {
-      type = 'swing'; title = 'You swing early and late';
-      text = 'Your judgement has no steady line. Write your escalation lines down.';
-    } else {
-      type = 'calib'; title = 'You are close to calibrated';
-      text = 'Your choices mostly track ground advice. Try comms blackout to test your autonomy.';
-    }
-    var cnt = [0, 0, 0, 0]; L.forEach(function(e) { cnt[e.c]++; });
-    var B = L.filter(function(e) { return e.blk; }), N = L.filter(function(e) { return !e.blk; });
-    return {
-      type: type, title: title, text: text, avg: avg, good: good, late: late, over: over,
-      cnt: cnt, n: L.length,
-      bAvg: B.length ? mean(B.map(function(e) { return e.diff; })) : null,
-      nAvg: N.length ? mean(N.map(function(e) { return e.diff; })) : null,
-      bn: B.length
-    };
-  }
-
-  function sg(x) { return (x > 0 ? '+' : x < 0 ? '-' : '') + Math.abs(x).toFixed(1); }
-
-  function guideSteps(r) { return r.cur === r.sc.ideal ? r.sc.steps : TPL[r.cur].steps; }
 
   function topHTML() {
-    return '<header class="top"><div class="mark"><i></i><div><b>INTERIM</b><small>Comms-delay decision trainer</small></div></div>' +
+    return '<header class="top"><div class="mark"><i></i><div><b>INTERIM</b><small>AstroPulse Decision System</small></div></div>' +
       '<button class="sw" role="switch" aria-checked="' + S.blackout + '" data-a="blk"><span>Comms<br>blackout</span><span class="t"><i></i></span></button></header>' +
       '<div class="strip"><span>MET <b>day 214</b></span><span>Ground delay <b>8-12 min</b></span><span class="' + (S.blackout ? 'lost' : '') + '">Link <b>' + (S.blackout ? 'LOST' : 'OK') + '</b></span></div>' +
-      (S.blackout ? '<div class="banner">Comms blackout is on: countdown is gone and ground advice will not arrive. Use offline manual.</div>' : '');
+      (S.blackout ? '<div class="banner">COMMS BLACKOUT: Ground advice unreachable. Use local SOP checklists!</div>' : '');
   }
 
   function homeHTML() {
-    var all = SC, done = {}; S.log.forEach(function(e) { done[e.sid] = 1; });
-    
-    // 如果用户点击了 Body Map 部位，进行场景过滤
+    var all = allSc(), done = {}; S.log.forEach(function(e){ done[e.sid] = 1; });
     if (S.bodyFilter) {
       all = all.filter(function(s) { return s.bodyHighlight === S.bodyFilter; });
     }
-
-    var n = SC.filter(function(s) { return done[s.id]; }).length;
+    var n = allSc().filter(function(s){return done[s.id];}).length;
 
     return '<div class="daily-check"><h3>Daily Wake-Up Check-in</h3><p style="font-size:13px">Report last night sleep quality:</p>' +
       '<div class="daily-btns"><button data-a="sleep-good">Good (&gt; 6 hrs)</button><button data-a="sleep-bad" style="color:var(--crit);border-color:var(--crit)">Bad (&lt; 5 hrs)</button></div></div>' +
-      
-      '<div class="bodymap-box" style="background:var(--panel);border:1px solid var(--line);padding:12px;text-align:center;margin-bottom:14px;">' +
-      '<div class="lab" style="margin-bottom:6px">NASA Interactive Body Map (Tap Part)</div>' +
-      '<svg viewBox="0 0 100 140" style="height:110px;cursor:pointer">' +
-      '<circle data-a="filter-body" data-v="head" cx="50" cy="20" r="14" class="body-part-clickable ' + (S.bodyFilter==='head'?'active':'') + '" />' +
+
+      '<div class="panel pad" style="margin-bottom:14px;"><div class="lab" style="margin-bottom:6px">Interactive Body Map (Tap Part)</div>' +
+      '<div class="body-map-container">' +
+      '<svg viewBox="0 0 100 160" class="human-body-svg">' +
+      '<circle data-a="filter-body" data-v="head" cx="50" cy="22" r="14" class="body-part-clickable ' + (S.bodyFilter==='head'?'active':'') + '" />' +
       '<circle data-a="filter-body" data-v="chest" cx="50" cy="55" r="16" class="body-part-clickable ' + (S.bodyFilter==='chest'?'active':'') + '" />' +
-      '<rect data-a="filter-body" data-v="body" x="35" y="78" width="30" height="45" rx="6" class="body-part-clickable ' + (S.bodyFilter==='body'?'active':'') + '" />' +
-      '</svg>' +
-      (S.bodyFilter ? '<button class="lnk" data-a="filter-clear" style="display:block;margin:4px auto 0">Clear Body Filter (' + S.bodyFilter + ')</button>' : '') +
+      '<rect data-a="filter-body" data-v="body" x="35" y="78" width="30" height="50" rx="6" class="body-part-clickable ' + (S.bodyFilter==='body'?'active':'') + '" />' +
+      '</svg></div>' +
+      (S.bodyFilter ? '<button class="lnk" data-a="filter-clear" style="display:block;margin:0 auto">Clear Body Filter (' + S.bodyFilter + ')</button>' : '') +
       '</div>' +
 
-      '<div class="h"><h2>Scenarios</h2><span class="cnt">' + n + '/' + SC.length + ' done</span></div><ol class="slist">' +
+      '<div class="h"><h2>Scenarios</h2><span class="cnt">' + n + '/' + allSc().length + ' done</span></div><ol class="slist">' +
       all.map(function(s, i) {
-        var last = S.log.filter(function(e) { return e.sid === s.id; })[0];
+        var last = S.log.filter(function(e){return e.sid === s.id;})[0];
         var h = HAZ[s.hz];
-        return '<li><button class="row" data-a="open" data-v="' + s.id + '"><span class="id">S' + (i + 1) + '</span><span><span class="hz">' + h[0] + ' ' + h[1] + '</span><span class="ttl">' + esc(s.title) + '</span><span class="sub">' + esc(s.brief) + '</span></span>' +
+        return '<li><button class="row" data-a="open" data-v="' + s.id + '"><span class="id">S' + (i+1) + '</span><span><span class="hz">' + h[0] + ' ' + h[1] + '</span><span class="ttl">' + esc(s.title) + '</span><span class="sub">' + esc(s.brief) + '</span></span>' +
           '<span class="rt"><span class="badge" data-v="' + (last ? last.v : '') + '">' + (last ? last.v.toUpperCase() : 'NOT DONE') + '</span><span class="dl">ground ' + s.delay + 'm</span></span></button></li>';
-      }).join('') + '</ol>';
+      }).join('') + '</ol>' +
+      '<button class="addrow" data-a="new">＋ Add custom scenario</button>';
   }
+
   function vitHTML() {
     var r = S.run;
     return r.sc.vit.map(function(v, i) {
       var x = +r.vals[i].toFixed(v.dp);
-      return '<div class="v" id="v' + i + '" data-s="' + stat(v, x) + '"><div class="lab">' + esc(v.label) + '</div><div class="val"><b>' + fmt(v, r.vals[i]) + '</b><u>' + esc(v.unit) + '</u></div><div class="meta"><span class="st"></span><svg class="spark" viewBox="0 0 60 18" aria-hidden="true"><path d=""/></svg></div></div>';
+      return '<div class="v" id="v' + i + '" data-s="' + stat(v, x) + '"><div class="lab">' + esc(v.label) + '</div><div class="val"><b>' + fmt(v, r.vals[i]) + '</b><u>' + esc(v.unit) + '</u></div><div class="meta"><span class="st"></span><svg class="spark" viewBox="0 0 60 18"><path d=""/></svg></div></div>';
     }).join('');
   }
 
   function briefHTML() {
     var r = S.run;
-    var fl = r.sc.vit.map(function(v, i) {
-      var x = +r.vals[i].toFixed(v.dp), s = stat(v, x);
-      return s === 'ok' ? null : v.label + ' ' + fmt(v, r.vals[i]) + ' ' + v.unit + ' (' + STL[s] + ')';
-    }).filter(Boolean);
-    var ai = r.aided ? '<div class="rec"><b>Interim suggests: ' + ACTS[r.sc.ideal].n + '</b><p>' + esc(r.sc.why) + '</p></div>' : '<button class="lnk" data-a="aid">Ask Interim for a recommendation</button><p class="note" style="margin-top:0">Aided decisions are not scored in profile.</p>';
-    return '<div class="h"><h2>Interim read-out</h2></div><div class="panel pad"><div class="lab">' + HAZ[r.sc.hz][0] + ' ' + HAZ[r.sc.hz][1] + '</div><p style="margin:4px 0 8px">Flagged: ' + (fl.length ? esc(fl.join(', ')) : 'nothing out of range') + '.</p>' + ai + '</div><div class="h"><h2>Your call</h2></div><ol class="choices">' +
+    var ai = r.aided ? '<div class="rec"><b>Interim suggests: ' + ACTS[r.sc.ideal].n + '</b><p>' + esc(r.sc.why) + '</p></div>' :
+      '<button class="lnk" data-a="aid">Ask Interim for a recommendation</button><p class="note" style="margin-top:0">Aided decisions are not scored in profile.</p>';
+    return '<div class="h"><h2>Immediate Assessment</h2></div><div class="panel pad"><div class="lab">' + HAZ[r.sc.hz][0] + ' ' + HAZ[r.sc.hz][1] + '</div><p style="margin:4px 0 8px">Review vitals and select initial action protocol.</p>' + ai + '</div>' +
+      '<div class="h"><h2>Your Call</h2></div><ol class="choices">' +
       ACTS.map(function(a, i) {
-        return '<li><button class="ch" data-a="choose" data-v="' + i + '"><span class="k">' + (i + 1) + '</span><span><span class="n">' + a.n + '</span><span class="d">' + a.d + '</span></span></button></li>';
-      }).join('') +
-      '</ol><p class="note">Once you choose, the clock starts.</p>';
+        return '<li><button class="ch" data-a="choose" data-v="' + i + '"><span class="k">' + (i+1) + '</span><span><span class="n">' + a.n + '</span><span class="d">' + a.d + '</span></span></button></li>';
+      }).join('') + '</ol>';
   }
 
   function waitHTML() {
     var r = S.run, b = S.blackout;
-    return '<div class="panel comm' + (b ? ' dead' : '') + '"><div class="lab">' + (b ? 'Ground reply link lost' : 'Ground reply') + '</div>' +
-      '<div class="cdrow"><div class="cd" id="cdText">--:--</div><div class="cdl">' + (b ? 'waited<br>no reply is coming' : 'remaining') + '</div></div>' +
+    return '<div class="panel comm' + (b ? ' dead' : '') + '"><div class="lab">' + (b ? 'Ground Link Lost' : 'Ground Reply CountDown') + '</div>' +
+      '<div class="cdrow"><div class="cd" id="cdText">--:--</div><div class="cdl">' + (b ? 'NO REPLY<br>EXPECTED' : 'remaining') + '</div></div>' +
       '<div class="bar' + (b ? ' dead' : '') + '"><i id="cdBar"></i></div>' +
       '<div class="crow"><span>Current call <b>' + ACTS[r.cur].n + '</b></span><span class="cb"><button class="lnk" data-a="spd">Speed ' + S.speed + 'x</button>' + (b ? '' : '<button class="lnk" data-a="skip">Skip ></button>') + '</span></div></div>' +
-      '<div class="panel bud"><div class="lab">Body budget<span class="bn"><b id="bv">100</b> / 100</span></div><div class="bar b" data-s="ok"><i id="bBar"></i></div></div>' +
-      '<div class="esc" id="alert" hidden><b>Interim alert:</b> Body budget dropping. <button class="btn" data-a="swap" data-v="' + Math.min(3, r.cur + 1) + '" style="margin-top:8px;min-height:44px">Escalate to ' + ACTS[Math.min(3, r.cur + 1)].n + '</button></div>' +
-      '<div class="h"><h2>Action Checklist</h2></div><ol class="steps">' + guideSteps(r).map(function(s, i) {
-        return '<li><label class="step"><input type="checkbox" data-i="' + i + '"' + (r.ticks[i] ? ' checked' : '') + '><span><b>Step ' + (i + 1) + ': ' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></span></label></li>';
+      '<div class="panel bud"><div class="lab">Body Health Budget<span class="bn"><b id="bv">100</b> / 100</span></div><div class="bar b" data-s="ok"><i id="bBar"></i></div></div>' +
+      '<div class="h"><h2>Action Checklist (SOP)</h2></div><ol class="steps">' + r.sc.steps.map(function(s, i) {
+        var isChecked = r.ticks[i] ? ' checked disabled' : '';
+        return '<li><label class="step"><input type="checkbox" data-i="' + i + '"' + isChecked + '><span><b>Step ' + (i+1) + ': ' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></span></label></li>';
       }).join('') + '</ol>' +
       '<div class="h"><h2>Change your call</h2></div><div class="mini">' +
       ACTS.map(function(a, i) {
         return '<button data-a="swap" data-v="' + i + '"' + (i === r.cur ? ' disabled' : '') + '>' + a.n + '</button>';
       }).join('') + '</div>' +
-      (b ? '<button class="btn ghost" data-a="end">End wait and log decision</button>' : '');
+      (b ? '<button class="btn ghost" data-a="end" style="margin-top:14px">Log Decision Offline</button>' : '');
   }
 
   function resultHTML() {
     var r = S.run, sc = r.sc, res = r.res, j = res.j, blk = r.blk;
-    var ref = blk ? 'The offline manual' : 'Ground';
-    var vd = {
-      match: ref + ' made the same call.',
-      ok: 'Workable. ' + ref + ' would choose "' + ACTS[sc.ideal].n + '".',
-      late: ref + ' would choose "' + ACTS[sc.ideal].n + '". You underestimated it.',
-      over: ref + ' would choose "' + ACTS[sc.ideal].n + '". Step was heavier than needed.'
-    };
-    var why = res.reason === 'collapse' ? 'Body budget ran out.' : res.reason === 'timeout' ? 'Ground never replied.' : '';
-    var chg = r.changes.length ? '<dt>Changes</dt><dd>' + r.changes.length + 'x</dd>' : '';
-    var right = blk
-      ? '<div class="nosig"><div class="lab">Ground GND</div><div class="big">NO SIGNAL</div><p>Ground never replied.</p></div>'
-      : '<div><div class="lab">Ground advice GND</div><div class="big">' + ACTS[sc.ideal].n + '</div><p>' + esc(sc.say) + '</p><p>' + esc(sc.why) + '</p></div>';
-    return '<div class="h"><h2>Compare</h2></div>' + (why ? '<p class="note" style="margin:-4px 0 8px;color:var(--crit)">' + why + '</p>' : '') +
-      '<div class="cmp"><div><div class="lab">Your call</div><div class="big">' + ACTS[r.first].n + '</div><p>' + esc(sc.out[r.first]) + '</p><dl><dt>Budget left</dt><dd>' + Math.round(r.budget) + ' / 100</dd><dt>Elapsed</dt><dd>' + mmss(r.simT) + '</dd>' + chg + '</dl></div>' + right + '</div>' +
-      '<div class="verdict" data-v="' + j.v + '">' + VT[j.v] + '<span>' + vd[j.v] + '</span></div>' +
-      '<div class="h"><h2>Action Checklist</h2></div><ol class="steps">' +
-      sc.steps.map(function(s, i) {
-        return '<li><label class="step"><input type="checkbox"><span><b>Step ' + (i + 1) + ': ' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></span></label></li>';
-      }).join('') + '</ol>' +
-      '<p class="esc"><b>Escalation line:</b> ' + esc(sc.esc) + '</p>' +
-      '<button class="btn" data-a="next">Next scenario</button><button class="btn ghost" data-a="exit">Back to scenarios</button>';
+    var ref = blk ? 'Offline Manual' : 'Ground';
+    return '<div class="h"><h2>Comparison & Verdict</h2></div>' +
+      '<div class="cmp"><div><div class="lab">Your choice</div><div class="big">' + ACTS[r.first].n + '</div><p>' + esc(sc.out[r.first]) + '</p></div>' +
+      '<div><div class="lab">' + ref + '</div><div class="big">' + ACTS[sc.ideal].n + '</div><p>' + esc(sc.why) + '</p></div></div>' +
+      '<div class="verdict" data-v="' + j.v + '">' + VT[j.v] + '<span>' + esc(sc.say) + '</span></div>' +
+      '<button class="btn" data-a="next" style="margin-top:14px">Next scenario</button><button class="btn ghost" data-a="exit">Back to Scenarios</button>';
   }
 
   function runHTML() {
     var r = S.run, sc = r.sc, h = HAZ[sc.hz];
     var ph = r.phase === 'brief' ? briefHTML() : r.phase === 'wait' ? waitHTML() : resultHTML();
-
-    // 身体部位高亮判定
     var part = sc.bodyHighlight || 'body';
-    var headStyle = part === 'head' ? 'style="display:block;"' : '';
-    var chestStyle = part === 'chest' ? 'style="display:block;"' : '';
-    var bodyStyle = part === 'body' ? 'style="display:block;"' : '';
 
-    return '<div class="runtop"><button class="lnk" data-a="exit">← ' + (r.phase === 'wait' ? 'Abandon' : 'Back') + '</button><span class="tag">' + h[0] + ' ' + h[1] + '</span></div>' +
-      '<section class="scard"><div class="met">' + esc(sc.met) + ' · ground delay ' + sc.delay + ' min</div><h1>' + esc(sc.title) + '</h1><p>' + esc(sc.brief) + '</p>' +
-      '<div class="body-map-container">' +
-      '<svg viewBox="0 0 100 200" class="human-body-svg">' +
-      '<path d="M50 15 C55 15 58 20 58 28 C58 35 55 40 50 40 C45 40 42 35 42 28 C42 20 45 15 50 15 Z M42 42 L58 42 L68 90 L58 90 L58 140 L52 190 L48 190 L42 140 L42 90 L32 90 Z" fill="var(--panel)" stroke="var(--line)" stroke-width="2"/>' +
-      '<circle id="highlight-head" cx="50" cy="28" r="10" class="pulse-spot" ' + headStyle + ' />' +
-      '<circle id="highlight-chest" cx="50" cy="60" r="12" class="pulse-spot" ' + chestStyle + ' />' +
-      '<rect id="highlight-body" x="30" y="15" width="40" height="175" rx="10" class="pulse-spot" ' + bodyStyle + ' />' +
+    return '<div class="runtop"><button class="lnk" data-a="exit">← Back</button><span class="tag">' + h[0] + ' ' + h[1] + '</span></div>' +
+      '<section class="scard"><div class="met">' + esc(sc.met) + ' · Ground delay ' + sc.delay + ' min</div><h1>' + esc(sc.title) + '</h1><p>' + esc(sc.brief) + '</p>' +
+      '<div class="body-map-container" style="margin:8px 0">' +
+      '<svg viewBox="0 0 100 160" class="human-body-svg" style="height:90px">' +
+      '<circle cx="50" cy="22" r="14" class="pulse-spot" ' + (part==='head'?'style="display:block"':'') + ' />' +
+      '<circle cx="50" cy="55" r="16" class="pulse-spot" ' + (part==='chest'?'style="display:block"':'') + ' />' +
+      '<rect x="35" y="78" width="30" height="50" rx="6" class="pulse-spot" ' + (part==='body'?'style="display:block"':'') + ' />' +
       '</svg></div>' +
       '</section>' +
       '<section class="vit" id="vit">' + vitHTML() + '</section><section id="phase">' + ph + '</section>';
@@ -686,37 +599,40 @@
   function logHTML() {
     var L = S.log;
     var rows = L.length ? L.map(function(e) {
-      var d = new Date(e.ts), t = d.toLocaleString('en-GB', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}), h = HAZ[e.hz] || HAZ[0];
-      return '<li class="logrow"><div><time>' + t + ' · ' + h[1] + '</time><div class="t">' + esc(e.title) + (e.blk ? '<span class="pill red">BLACKOUT</span>' : '') + (e.demo ? '<span class="pill">DEMO</span>' : '') + (e.aided ? '<span class="pill">AIDED</span>' : '') + '</div>' +
-        '<div class="s">You chose "' + ACTS[e.c].n + '", advised "' + ACTS[e.ideal].n + '" · ' + VT[e.v] + '</div></div>' +
-        '<div class="r">budget<br>' + e.budget + '</div></li>';
-    }).join('') : '<li class="note" style="padding:14px 0">Nothing logged yet. Run a scenario or load demo entries.</li>';
-    return '<div class="h"><h2>Decision log</h2><span class="cnt">' + L.length + ' entries</span></div><ol class="slist">' + rows + '</ol>' +
-      (L.length ? '<button class="btn ghost" data-a="clear">' + (S.armClear ? 'Tap again to confirm' : 'Clear log') + '</button>' : '');
+      var d = new Date(e.ts), t = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+      var h = HAZ[e.hz];
+      return '<li class="logrow"><div><time>' + t + ' · ' + h[0] + '</time><div class="t">' + esc(e.title) + '<span class="pill' + (e.blk ? ' red' : '') + '">' + (e.blk ? 'BLACKOUT' : 'DELAY') + '</span></div><div class="s">Chose "' + ACTS[e.c].n + '" · ' + VT[e.v] + '</div></div><div class="r">bud ' + e.budget + '<br>' + e.mins + 'm</div></li>';
+    }).join('') : '<li class="note" style="padding:14px 0">No decisions logged yet. Run a scenario first.</li>';
+    return '<div class="h"><h2>Decision Log</h2><span class="cnt">' + L.length + ' entries</span></div><ol class="slist">' + rows + '</ol>' +
+      (L.length ? '<button class="lnk" data-a="clear" style="margin-top:14px;color:var(--crit)">' + (S.armClear ? 'Tap again to confirm' : 'Clear decision log') + '</button>' : '');
   }
 
   function profHTML() {
-    var p = prof(), n = S.log.filter(function(e) { return !e.aided; }).length;
-    if (!p) return '<div class="h"><h2>Decision profile</h2></div><div class="panel pad"><p>Finish at least 3 scenarios to generate a profile. You have ' + n + ' so far.</p><div class="bar" style="margin-top:10px"><i style="width:' + (n / 3 * 100) + '%"></i></div></div>' +
-      '<button class="btn ghost" data-a="demo">Load demo entries</button>';
-    var pos = Math.max(-2, Math.min(2, p.avg)), pct = (pos + 2) / 4 * 100;
-    return '<div class="h"><h2>Decision profile</h2><span class="cnt">from ' + p.n + ' decisions</span></div>' +
-      '<div class="panel pad"><div class="lab">Your type</div><div class="ptype">' + p.title + '</div><p>' + p.text + '</p>' +
-      '<div class="gauge" role="img" aria-label="Average bias ' + sg(p.avg) + ' levels"><i class="dot" style="left:' + pct + '%"></i></div><div class="gl"><span>- Over-waiting</span><span>Calibrated</span><span>Over-reacting +</span></div>' +
-      '<div class="stats"><div><b>' + Math.round(p.good / p.n * 100) + '%</b><span>Matched ground</span></div><div><b>' + p.late + '</b><span>Too slow</span></div><div><b>' + p.over + '</b><span>Overreactions</span></div></div></div>';
+    var L = S.log.filter(function(e){return !e.aided;}), n = L.length;
+    var lates = L.filter(function(e){return e.v==='late';}).length;
+    var overs = L.filter(function(e){return e.v==='over';}).length;
+    var style = n === 0 ? 'Balanced' : lates > overs ? 'Over-Wait / Hesitant' : overs > lates ? 'Over-Reaction / Urgent' : 'Calibrated & Aligned';
+    var pct = n === 0 ? 50 : Math.round(((lates * -1 + overs * 1 + n) / (n * 2)) * 100);
+
+    return '<div class="h"><h2>Decision Profile</h2></div>' +
+      '<div class="panel pad"><div class="lab">Evaluated behavior</div><div class="ptype">' + style + '</div>' +
+      '<div class="gauge"><div class="dot" style="left:' + pct + '%"></div></div>' +
+      '<div class="gl"><span>Delay/Wait</span><span>Calibrated</span><span>Urgent/Over</span></div>' +
+      '<div class="stats"><div><b>' + n + '</b><span>Decisions</span></div><div><b>' + lates + '</b><span>Too slow</span></div><div><b>' + overs + '</b><span>Over-react</span></div></div></div>';
   }
 
   function newHTML() {
-    var o = HAZ.map(function(h, i) { return '<option value="' + i + '">' + h[0] + ' ' + h[2] + '</option>'; }).join('');
-    var a = ACTS.map(function(x, i) { return '<option value="' + i + '"' + (i === 2 ? ' selected' : '') + '>' + x.n + '</option>'; }).join('');
-    return '<div class="h"><h2>New scenario</h2></div><form class="f" id="nf">' +
-      '<label><span class="lab">Title</span><input id="f-t" maxlength="60" placeholder="e.g. Abdominal pain + fever"></label>' +
-      '<label><span class="lab">Symptoms</span><textarea id="f-b" maxlength="220" placeholder="What happened"></textarea></label>' +
-      '<label><span class="lab">Hazard</span><select id="f-h">' + o + '</select></label>' +
-      '<div class="two"><label><span class="lab">Heart rate bpm</span><input id="f-hr" type="number" value="108"></label><label><span class="lab">SpO2 %</span><input id="f-sp" type="number" value="95"></label></div>' +
-      '<div class="two"><label><span class="lab">Systolic mmHg</span><input id="f-bp" type="number" value="110"></label><label><span class="lab">Discomfort /10</span><input id="f-d" type="number" value="5"></label></div>' +
-      '<div class="two"><label><span class="lab">Ground delay (min)</span><input id="f-dl" type="number" value="10"></label><label><span class="lab">Ground would say</span><select id="f-i">' + a + '</select></label></div>' +
-      '<button class="btn" type="submit">Create scenario</button><button class="btn ghost" type="button" data-a="cancel" style="margin-top:0">Cancel</button></form>';
+    return '<div class="h"><h2>Add Custom Scenario</h2></div>' +
+      '<form class="f" id="nf"><label>Scenario Title<input id="f-t" required placeholder="e.g. Sudden joint pain during EVA"></label>' +
+      '<label>Brief Description<textarea id="f-b" required placeholder="Describe what happened and symptoms"></textarea></label>' +
+      '<div class="two"><label>Hazard Category<select id="f-h"><option value="0">H1 Distance</option><option value="1">H2 Isolation</option><option value="2">H3 Closed Env</option><option value="3">H4 Gravity</option><option value="4" selected>H5 Radiation</option><option value="5">H6 Cardio</option></select></label>' +
+      '<label>Ground Delay (min)<input id="f-dl" type="number" value="10" min="1" max="30"></label></div>' +
+      '<div class="two"><label>Initial HR (bpm)<input id="f-hr" type="number" value="95" min="40" max="180"></label>' +
+      '<label>Initial SpO2 (%)<input id="f-sp" type="number" value="96" min="70" max="100"></label></div>' +
+      '<div class="two"><label>Initial Blood Pressure<input id="f-bp" type="number" value="120" min="70" max="200"></label>' +
+      '<label>Initial Discomfort (/10)<input id="f-d" type="number" value="5" min="0" max="10"></label></div>' +
+      '<label>Reference Ideal Action<select id="f-i"><option value="0">1. Observe</option><option value="1" selected>2. Self-treat</option><option value="2">3. Call crew</option><option value="3">4. Emergency</option></select></label>' +
+      '<button class="btn" type="submit">Save & Test Scenario</button><button class="btn ghost" type="button" data-a="cancel" style="margin-top:0">Cancel</button></form>';
   }
 
   function render() {
@@ -730,127 +646,52 @@
     if (v === 'run') live();
   }
 
-  function num(id, lo, hi, d) {
-    var x = parseFloat($(id).value); if (isNaN(x)) x = d; return Math.max(lo, Math.min(hi, x));
-  }
+  document.addEventListener('click', function(e) {
+    var t = e.target.closest('[data-a]'); if (!t) return;
+    var a = t.dataset.a, v = t.dataset.v;
+    if (a === 'tab') { S.run = null; S.view = v; S.armClear = false; render(); window.scrollTo(0, 0); }
+    else if (a === 'open') { startRun(findSc(v)); }
+    else if (a === 'blk') { S.blackout = !S.blackout; render(); }
+    else if (a === 'choose') { send('CHOOSE', +v); }
+    else if (a === 'aid') { if (S.run && S.run.phase === 'brief') { S.run.aided = true; render(); } }
+    else if (a === 'swap') { var r = S.run; if (r && r.phase === 'wait' && +v !== r.cur) { r.changes.push(+v); r.ticks = {}; setSeg(+v); render(); } }
+    else if (a === 'spd') { S.speed = SPEEDS[(SPEEDS.indexOf(S.speed) + 1) % SPEEDS.length]; render(); }
+    else if (a === 'skip') { if (S.run && S.run.phase === 'wait') S.run.simT = Math.max(S.run.simT, S.run.sc.delay); }
+    else if (a === 'end') { send('END', 'manual'); }
+    else if (a === 'exit') { S.run = null; S.view = 'home'; render(); window.scrollTo(0, 0); }
+    else if (a === 'filter-body') { S.bodyFilter = v; render(); }
+    else if (a === 'filter-clear') { S.bodyFilter = null; render(); }
+    else if (a === 'sleep-good') { alert('Sleep status recorded: Normal readiness.'); }
+    else if (a === 'sleep-bad') {
+      alert('⚠️ Fatigue & High Risk Detected! Auto-redirecting to Scenario 2 (Insomnia & Fatigue Protocol)...');
+      startRun(SC[1]);
+    }
+    else if (a === 'next') {
+      var all = allSc();
+      var i = all.indexOf(findSc(S.run.sc.id)), done = {};
+      S.log.forEach(function(x) { done[x.sid] = 1; });
+      var nx = null;
+      for (var k = 1; k <= all.length; k++) {
+        var c = all[(i + k) % all.length];
+        if (!done[c.id]) { nx = c; break; }
+      }
+      if (nx) { startRun(nx); } else { S.run = null; S.view = 'profile'; render(); window.scrollTo(0, 0); }
+    }
+    else if (a === 'new') { S.view = 'new'; render(); window.scrollTo(0, 0); }
+    else if (a === 'cancel') { S.view = 'home'; render(); }
+    else if (a === 'clear') {
+      if (S.armClear) { S.log = []; S.armClear = false; save(); render(); }
+      else { S.armClear = true; render(); setTimeout(function() { if (S.armClear) { S.armClear = false; if (S.view === 'log') render(); } }, 3000); }
+    }
+  });
 
- document.addEventListener('click', function(e) {
-  var t = e.target.closest('[data-a]'); if (!t) return;
-  var a = t.dataset.a, v = t.dataset.v;
-  
-  if (a === 'tab') { 
-    S.run = null; S.view = v; S.armClear = false; 
-    render(); window.scrollTo(0, 0); 
-  }
-  else if (a === 'open') { 
-    startRun(findSc(v)); // ✅ 修复：传入了正确的场景 ID v
-  }
-  else if (a === 'blk') { 
-    S.blackout = !S.blackout; render(); 
-  }
-  else if (a === 'choose') { 
-    send('CHOOSE', +v); 
-  }
-  else if (a === 'aid') { 
-    if (S.run && S.run.phase === 'brief') { S.run.aided = true; render(); } 
-  }
-  else if (a === 'swap') { 
-    var r = S.run; 
-    if (r && r.phase === 'wait' && +v !== r.cur) { // ✅ 修复：将 tv 改为 +v
-      r.changes.push(+v); 
-      r.ticks = {}; 
-      setSeg(+v); 
-      render(); 
-    } 
-  }
-  else if (a === 'spd') { 
-    S.speed = SPEEDS[(SPEEDS.indexOf(S.speed) + 1) % SPEEDS.length]; render(); 
-  }
-  else if (a === 'skip') { 
-    if (S.run && S.run.phase === 'wait') S.run.simT = Math.max(S.run.simT, S.run.sc.delay); 
-  }
-  else if (a === 'end') { 
-    send('END', 'manual'); 
-  }
-  else if (a === 'exit') {
-    if (S.run && S.run.phase !== 'result' && S.run.first !== null) {}
-    S.run = null;
-    S.view = 'home';
-    render();
-    window.scrollTo(0, 0);
-  }
-  else if (a === 'filter-body') { 
-    S.bodyFilter = v; render(); 
-  }
-  else if (a === 'filter-clear') { 
-    S.bodyFilter = null; render(); 
-  }
-  else if (a === 'sleep-good') { 
-    alert('Sleep status recorded: Normal readiness.'); 
-  }
-  else if (a === 'sleep-bad') {
-    alert('⚠️ Fatigue & High Risk Detected! Auto-redirecting to Scenario 2 (Insomnia & Fatigue Protocol)...');
-    startRun(SC[1]);
-  }
-  else if (a === 'next') { 
-    // ✅ 修复：重写了完整的 Next 场景切换逻辑
-    var all = allSc();
-    var i = all.indexOf(findSc(S.run.sc.id)), done = {};
-    S.log.forEach(function(x) { done[x.sid] = 1; });
-    var nx = null;
-    for (var k = 1; k <= all.length; k++) {
-      var c = all[(i + k) % all.length];
-      if (!done[c.id]) { nx = c; break; }
-    }
-    if (nx) {
-      startRun(nx);
-    } else {
-      S.run = null; S.view = 'profile';
-      render(); window.scrollTo(0, 0);
-    }
-  }
-  else if (a === 'new') { 
-    S.view = 'new'; render(); window.scrollTo(0, 0); 
-  }
-  else if (a === 'cancel') { 
-    S.view = 'home'; render(); 
-  }
-  else if (a === 'clear') {
-    if (S.armClear) { 
-      S.log = []; S.armClear = false; save(); render(); 
-    } else { 
-      S.armClear = true; render(); 
-      setTimeout(function() { 
-        if (S.armClear) { S.armClear = false; if (S.view === 'log') render(); } 
-      }, 3000); 
-    }
-  }
-  else if (a === 'demo') {
-    var ids = [['s1', 0, 0, 34], ['s3', 1, 0, 61], ['s5', 0, 1, 28], ['s4', 3, 0, 88], ['s6', 0, 0, 90]];
-    ids.forEach(function(d, idx) {
-      var sc = findSc(d[0]), j = judge(sc, d[1]);
-      S.log.push({
-        id: Date.now() + idx, ts: Date.now() - (ids.length - idx) * 3600000, sid: sc.id, title: sc.title, hz: sc.hz,
-        c: d[1], ideal: sc.ideal, v: j.v, diff: j.diff, blk: !!d[2],
-        budget: d[3], mins: sc.delay, sw: 0, reason: 'reply', demo: true
-      });
-    });
-    S.log.sort(function(x, y) { return y.ts - x.ts; }); save();
-    render();
-  }
-});
-
-document.addEventListener('change', function(e) {
+  document.addEventListener('change', function(e) {
     var t = e.target;
-    // 检查是否点中了 Action Checklist 里的步骤
     if (t.matches && t.matches('.step input[data-i]') && S.run && S.run.phase === 'wait') {
       var idx = t.dataset.i;
-      // 如果还没勾选过，并且当前是被勾选状态
       if (!S.run.ticks[idx] && t.checked) {
         S.run.ticks[idx] = true;
-        t.disabled = true; // 锁定输入框，防止重复点击刷分
-        
-        // 核心新功能：每完成一步 SOP 自救，实时恢复 +5% 身体预算
+        t.disabled = true;
         S.run.budget = Math.min(100, S.run.budget + 5);
         var bBar = $('#bBar'), bv = $('#bv');
         if (bBar) bBar.style.width = S.run.budget + '%';
@@ -860,13 +701,24 @@ document.addEventListener('change', function(e) {
   });
 
   document.addEventListener('submit', function(e) {
-    if (e.target.id !== 'nf') return; e.preventDefault();
-    var f = {
-      id: 'c' + Date.now(), hz: +$('#f-h').value, title: $('#f-t').value.trim() || 'Custom scenario ' + (S.custom.length + 1),
-      brief: $('#f-b').value.trim(), hr: num('#f-hr', 30, 200, 108), spo2: num('#f-sp', 60, 100, 95),
-      sbp: num('#f-bp', 50, 220, 110), dis: num('#f-d', 0, 10, 5), delay: num('#f-dl', 8, 20, 10), ideal: +$('#f-i').value
+    var f = e.target; if (f.id !== 'nf') return;
+    e.preventDefault();
+    var item = {
+      id: 'c' + Date.now(),
+      hz: +$('#f-h').value,
+      title: $('#f-t').value.trim() || 'Custom scenario',
+      brief: $('#f-b').value.trim(),
+      delay: +$('#f-dl').value,
+      hr: parseFloat($('#f-hr').value) || 95,
+      spo2: parseFloat($('#f-sp').value) || 96,
+      sbp: parseFloat($('#f-bp').value) || 120,
+      dis: parseFloat($('#f-d').value) || 5,
+      ideal: +$('#f-i').value
     };
-    S.custom.push(f); save(); S.view = 'home'; render(); window.scrollTo(0, 0);
+    S.custom.push(item);
+    save();
+    S.view = 'home';
+    render();
   });
 
   render();
