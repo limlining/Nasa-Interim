@@ -226,6 +226,14 @@
       50% { transform: scale(1.15); opacity: 1; fill: var(--crit); }
       100% { transform: scale(1); opacity: 0.4; }
     }
+    /* Body Map 点击高亮样式 */
+    .body-part-clickable { fill: var(--line); opacity: 0.5; transition: all .2s; }
+    .body-part-clickable:hover { fill: var(--accent); opacity: 0.9; }
+    .body-part-clickable.active { fill: var(--crit); opacity: 1; }
+    .daily-check { background: var(--panel); border: 1px solid var(--accent); padding: 12px; margin-bottom: 16px; }
+    .daily-check h3 { font: 600 14px var(--font-d); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+    .daily-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .daily-btns button { padding: 8px; border: 1px solid var(--ink); background: var(--bg); font: 600 12.5px var(--font-b); cursor: pointer; }
   </style>
 </head>
 <body>
@@ -252,7 +260,8 @@
 
   var S = {
     view: 'home', blackout: false, speed: 12, log: saved.log || [],
-    custom: saved.custom || [], run: null, armClear: false
+    custom: saved.custom || [], run: null, armClear: false,
+  bodyFilter: null
   };
 
   var HAZ = [
@@ -556,19 +565,36 @@
   }
 
   function homeHTML() {
-    var all = allSc(), done = {}; S.log.forEach(function(e) { done[e.sid] = 1; });
-    var n = all.filter(function(s) { return done[s.id]; }).length;
-    return '<div class="h"><h2>Scenarios</h2><span class="cnt">' + n + '/' + all.length + ' done</span></div><ol class="slist">' +
+    var all = SC, done = {}; S.log.forEach(function(e) { done[e.sid] = 1; });
+    
+    // 如果用户点击了 Body Map 部位，进行场景过滤
+    if (S.bodyFilter) {
+      all = all.filter(function(s) { return s.bodyHighlight === S.bodyFilter; });
+    }
+
+    var n = SC.filter(function(s) { return done[s.id]; }).length;
+
+    return '<div class="daily-check"><h3>Daily Wake-Up Check-in</h3><p style="font-size:13px">Report last night sleep quality:</p>' +
+      '<div class="daily-btns"><button data-a="sleep-good">Good (&gt; 6 hrs)</button><button data-a="sleep-bad" style="color:var(--crit);border-color:var(--crit)">Bad (&lt; 5 hrs)</button></div></div>' +
+      
+      '<div class="bodymap-box" style="background:var(--panel);border:1px solid var(--line);padding:12px;text-align:center;margin-bottom:14px;">' +
+      '<div class="lab" style="margin-bottom:6px">NASA Interactive Body Map (Tap Part)</div>' +
+      '<svg viewBox="0 0 100 140" style="height:110px;cursor:pointer">' +
+      '<circle data-a="filter-body" data-v="head" cx="50" cy="20" r="14" class="body-part-clickable ' + (S.bodyFilter==='head'?'active':'') + '" />' +
+      '<circle data-a="filter-body" data-v="chest" cx="50" cy="55" r="16" class="body-part-clickable ' + (S.bodyFilter==='chest'?'active':'') + '" />' +
+      '<rect data-a="filter-body" data-v="body" x="35" y="78" width="30" height="45" rx="6" class="body-part-clickable ' + (S.bodyFilter==='body'?'active':'') + '" />' +
+      '</svg>' +
+      (S.bodyFilter ? '<button class="lnk" data-a="filter-clear" style="display:block;margin:4px auto 0">Clear Body Filter (' + S.bodyFilter + ')</button>' : '') +
+      '</div>' +
+
+      '<div class="h"><h2>Scenarios</h2><span class="cnt">' + n + '/' + SC.length + ' done</span></div><ol class="slist">' +
       all.map(function(s, i) {
         var last = S.log.filter(function(e) { return e.sid === s.id; })[0];
         var h = HAZ[s.hz];
-        return '<li><button class="row" data-a="open" data-v="' + s.id + '"><span class="id">S' + (i + 1) + '</span><span><span class="hz">' + h[0] + ' ' + h[1] + (s.custom ? ' custom' : '') + '</span><span class="ttl">' + esc(s.title) + '</span><span class="sub">' + esc(firstSentence(s.brief)) + '</span></span>' +
-          '<span class="rt"><span class="badge" data-v="' + (last ? last.v : '') + '">' + (last ? VT[last.v] : 'Not done') + '</span><span class="dl">ground ' + s.delay + 'm</span></span></button></li>';
-      }).join('') + '</ol><button class="addrow" data-a="new">+ New scenario</button>' +
-      '<p class="how"><b>How it works:</b> Pick a scenario, assess symptoms, and choose an action. Clock starts and vitals move. Finish 3 scenarios for your profile.</p>' +
-      '<p class="note">Training simulation. Medical parameters are for demonstration only.</p>';
+        return '<li><button class="row" data-a="open" data-v="' + s.id + '"><span class="id">S' + (i + 1) + '</span><span><span class="hz">' + h[0] + ' ' + h[1] + '</span><span class="ttl">' + esc(s.title) + '</span><span class="sub">' + esc(s.brief) + '</span></span>' +
+          '<span class="rt"><span class="badge" data-v="' + (last ? last.v : '') + '">' + (last ? last.v.toUpperCase() : 'NOT DONE') + '</span><span class="dl">ground ' + s.delay + 'm</span></span></button></li>';
+      }).join('') + '</ol>';
   }
-
   function vitHTML() {
     var r = S.run;
     return r.sc.vit.map(function(v, i) {
@@ -721,6 +747,14 @@
     else if (a === 'skip') { if (S.run && S.run.phase === 'wait') S.run.simT = Math.max(S.run.simT, S.run.sc.delay); }
     else if (a === 'end') { send('END', 'manual'); }
     else if (a === 'exit') { S.run = null; S.view = 'home'; render(); window.scrollTo(0, 0); }
+    // 把它放进你的 click 事件分发判断里：
+    else if (a === 'filter-body') { S.bodyFilter = v; render(); }
+    else if (a === 'filter-clear') { S.bodyFilter = null; render(); }
+    else if (a === 'sleep-good') { alert('Sleep status recorded: Normal readiness.'); }
+    else if (a === 'sleep-bad') {
+      alert('⚠️ Fatigue & High Risk Detected! Auto-redirecting to Scenario 2 (Insomnia & Fatigue Protocol)...');
+      startRun(SC[1]); // 自动触发跳转 Scenario 2
+    }
     else if (a === 'next') {
       var all = allSc(), i = all.indexOf(findSc(S.run.sc.id)), done = {};
       S.log.forEach(function(x) { done[x.sid] = 1; });
@@ -750,11 +784,17 @@
     }
   });
 
-  document.addEventListener('change', function(e) {
+document.addEventListener('change', function(e) {
     var t = e.target;
+    // 检查是否点中了 Action Checklist 里的步骤
     if (t.matches && t.matches('.step input[data-i]') && S.run && S.run.phase === 'wait') {
-      S.run.ticks[t.dataset.i] = t.checked;
-      if (t.checked) {
+      var idx = t.dataset.i;
+      // 如果还没勾选过，并且当前是被勾选状态
+      if (!S.run.ticks[idx] && t.checked) {
+        S.run.ticks[idx] = true;
+        t.disabled = true; // 锁定输入框，防止重复点击刷分
+        
+        // 核心新功能：每完成一步 SOP 自救，实时恢复 +5% 身体预算
         S.run.budget = Math.min(100, S.run.budget + 5);
         var bBar = $('#bBar'), bv = $('#bv');
         if (bBar) bBar.style.width = S.run.budget + '%';
