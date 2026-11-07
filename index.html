@@ -734,64 +734,111 @@
     var x = parseFloat($(id).value); if (isNaN(x)) x = d; return Math.max(lo, Math.min(hi, x));
   }
 
-  document.addEventListener('click', function(e) {
-    var t = e.target.closest('[data-a]'); if (!t) return;
-    var a = t.dataset.a, v = t.dataset.v;
-    if (a === 'tab') { S.run = null; S.view = v; S.armClear = false; render(); window.scrollTo(0, 0); }
-    else if (a === 'open') { startRun(findSc(v)); }
-    else if (a === 'blk') { S.blackout = !S.blackout; render(); }
-    else if (a === 'choose') { send('CHOOSE', +v); }
-    else if (a === 'aid') { if (S.run && S.run.phase === 'brief') { S.run.aided = true; render(); } }
-    else if (a === 'swap') { var r = S.run; if (r && r.phase === 'wait' && +v !== r.cur) { r.changes.push(+v); r.ticks = {}; setSeg(+v); render(); } }
-    else if (a === 'spd') { S.speed = SPEEDS[(SPEEDS.indexOf(S.speed) + 1) % SPEEDS.length]; render(); }
-    else if (a === 'skip') { if (S.run && S.run.phase === 'wait') S.run.simT = Math.max(S.run.simT, S.run.sc.delay); }
-    else if (a === 'end') { send('END', 'manual'); }
-   else if (a === 'exit') {
-      // 修复：如果用户是在任务还没完成（没做选择或没到结算页）时点 Back，
-      // 我们直接安全中止，不生成任何错乱的评判（Too slow / Overreaction）和 Log 记录！
-      if (S.run && S.run.phase !== 'result' && S.run.first !== null) {
-        // 如果已经做过选择但强行退出，我们可以选择不记录，或者由你决定是否记录
-      }
-      S.run = null; 
-      S.view = 'home'; 
+ document.addEventListener('click', function(e) {
+  var t = e.target.closest('[data-a]'); if (!t) return;
+  var a = t.dataset.a, v = t.dataset.v;
+  
+  if (a === 'tab') { 
+    S.run = null; S.view = v; S.armClear = false; 
+    render(); window.scrollTo(0, 0); 
+  }
+  else if (a === 'open') { 
+    startRun(findSc(v)); // ✅ 修复：传入了正确的场景 ID v
+  }
+  else if (a === 'blk') { 
+    S.blackout = !S.blackout; render(); 
+  }
+  else if (a === 'choose') { 
+    send('CHOOSE', +v); 
+  }
+  else if (a === 'aid') { 
+    if (S.run && S.run.phase === 'brief') { S.run.aided = true; render(); } 
+  }
+  else if (a === 'swap') { 
+    var r = S.run; 
+    if (r && r.phase === 'wait' && +v !== r.cur) { // ✅ 修复：将 tv 改为 +v
+      r.changes.push(+v); 
+      r.ticks = {}; 
+      setSeg(+v); 
       render(); 
-      window.scrollTo(0, 0);
+    } 
+  }
+  else if (a === 'spd') { 
+    S.speed = SPEEDS[(SPEEDS.indexOf(S.speed) + 1) % SPEEDS.length]; render(); 
+  }
+  else if (a === 'skip') { 
+    if (S.run && S.run.phase === 'wait') S.run.simT = Math.max(S.run.simT, S.run.sc.delay); 
+  }
+  else if (a === 'end') { 
+    send('END', 'manual'); 
+  }
+  else if (a === 'exit') {
+    if (S.run && S.run.phase !== 'result' && S.run.first !== null) {}
+    S.run = null;
+    S.view = 'home';
+    render();
+    window.scrollTo(0, 0);
+  }
+  else if (a === 'filter-body') { 
+    S.bodyFilter = v; render(); 
+  }
+  else if (a === 'filter-clear') { 
+    S.bodyFilter = null; render(); 
+  }
+  else if (a === 'sleep-good') { 
+    alert('Sleep status recorded: Normal readiness.'); 
+  }
+  else if (a === 'sleep-bad') {
+    alert('⚠️ Fatigue & High Risk Detected! Auto-redirecting to Scenario 2 (Insomnia & Fatigue Protocol)...');
+    startRun(SC[1]);
+  }
+  else if (a === 'next') { 
+    // ✅ 修复：重写了完整的 Next 场景切换逻辑
+    var all = allSc();
+    var i = all.indexOf(findSc(S.run.sc.id)), done = {};
+    S.log.forEach(function(x) { done[x.sid] = 1; });
+    var nx = null;
+    for (var k = 1; k <= all.length; k++) {
+      var c = all[(i + k) % all.length];
+      if (!done[c.id]) { nx = c; break; }
     }
-    else if (a === 'filter-body') { S.bodyFilter = v; render(); }
-    else if (a === 'filter-clear') { S.bodyFilter = null; render(); }
-    else if (a === 'sleep-good') { alert('Sleep status recorded: Normal readiness.'); }
-    else if (a === 'sleep-bad') {
-      alert('⚠️ Fatigue & High Risk Detected! Auto-redirecting to Scenario 2 (Insomnia & Fatigue Protocol)...');
-      startRun(SC[1]); // 自动触发跳转 Scenario 2
+    if (nx) {
+      startRun(nx);
+    } else {
+      S.run = null; S.view = 'profile';
+      render(); window.scrollTo(0, 0);
     }
-    else if (a === 'next') {
-      var all = allSc(), i = all.indexOf(findSc(S.run.sc.id)), done = {};
-      S.log.forEach(function(x) { done[x.sid] = 1; });
-      var nx = null;
-      for (var k = 1; k <= all.length; k++) {
-        var c = all[(i + k) % all.length];
-        if (!done[c.id]) { nx = c; break; }
-      }
-      if (nx) startRun(nx); else { S.run = null; S.view = 'profile'; render(); window.scrollTo(0, 0); }
+  }
+  else if (a === 'new') { 
+    S.view = 'new'; render(); window.scrollTo(0, 0); 
+  }
+  else if (a === 'cancel') { 
+    S.view = 'home'; render(); 
+  }
+  else if (a === 'clear') {
+    if (S.armClear) { 
+      S.log = []; S.armClear = false; save(); render(); 
+    } else { 
+      S.armClear = true; render(); 
+      setTimeout(function() { 
+        if (S.armClear) { S.armClear = false; if (S.view === 'log') render(); } 
+      }, 3000); 
     }
-    else if (a === 'new') { S.view = 'new'; render(); window.scrollTo(0, 0); }
-    else if (a === 'cancel') { S.view = 'home'; render(); }
-    else if (a === 'clear') {
-      if (S.armClear) { S.log = []; S.armClear = false; save(); render(); }
-      else { S.armClear = true; render(); setTimeout(function() { if (S.armClear) { S.armClear = false; if (S.view === 'log') render(); } }, 3000); }
-    }
-    else if (a === 'demo') {
-      var ids = [['s1', 0, 0, 34], ['s3', 1, 0, 61], ['s5', 0, 1, 28], ['s4', 3, 0, 88], ['s6', 0, 0, 90]];
-      ids.forEach(function(d, idx) {
-        var sc = findSc(d[0]), j = judge(sc, d[1]);
-        S.log.push({
-          id: Date.now() + idx, ts: Date.now() - (ids.length - idx) * 3600000, sid: sc.id, title: sc.title, hz: sc.hz,
-          c: d[1], ideal: sc.ideal, v: j.v, diff: j.diff, blk: !!d[2], budget: d[3], mins: sc.delay, sw: 0, reason: 'reply', demo: true
-        });
+  }
+  else if (a === 'demo') {
+    var ids = [['s1', 0, 0, 34], ['s3', 1, 0, 61], ['s5', 0, 1, 28], ['s4', 3, 0, 88], ['s6', 0, 0, 90]];
+    ids.forEach(function(d, idx) {
+      var sc = findSc(d[0]), j = judge(sc, d[1]);
+      S.log.push({
+        id: Date.now() + idx, ts: Date.now() - (ids.length - idx) * 3600000, sid: sc.id, title: sc.title, hz: sc.hz,
+        c: d[1], ideal: sc.ideal, v: j.v, diff: j.diff, blk: !!d[2],
+        budget: d[3], mins: sc.delay, sw: 0, reason: 'reply', demo: true
       });
-      S.log.sort(function(x, y) { return y.ts - x.ts; }); save(); render();
-    }
-  });
+    });
+    S.log.sort(function(x, y) { return y.ts - x.ts; }); save();
+    render();
+  }
+});
 
 document.addEventListener('change', function(e) {
     var t = e.target;
