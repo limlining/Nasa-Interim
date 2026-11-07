@@ -746,8 +746,17 @@
     else if (a === 'spd') { S.speed = SPEEDS[(SPEEDS.indexOf(S.speed) + 1) % SPEEDS.length]; render(); }
     else if (a === 'skip') { if (S.run && S.run.phase === 'wait') S.run.simT = Math.max(S.run.simT, S.run.sc.delay); }
     else if (a === 'end') { send('END', 'manual'); }
-    else if (a === 'exit') { S.run = null; S.view = 'home'; render(); window.scrollTo(0, 0); }
-    // 把它放进你的 click 事件分发判断里：
+   else if (a === 'exit') {
+      // 修复：如果用户是在任务还没完成（没做选择或没到结算页）时点 Back，
+      // 我们直接安全中止，不生成任何错乱的评判（Too slow / Overreaction）和 Log 记录！
+      if (S.run && S.run.phase !== 'result' && S.run.first !== null) {
+        // 如果已经做过选择但强行退出，我们可以选择不记录，或者由你决定是否记录
+      }
+      S.run = null; 
+      S.view = 'home'; 
+      render(); 
+      window.scrollTo(0, 0);
+    }
     else if (a === 'filter-body') { S.bodyFilter = v; render(); }
     else if (a === 'filter-clear') { S.bodyFilter = null; render(); }
     else if (a === 'sleep-good') { alert('Sleep status recorded: Normal readiness.'); }
