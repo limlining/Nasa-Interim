@@ -1,0 +1,230 @@
+# INTERIM
+### Astronaut Health Assessment and Decision-Making Simulator
+
+**Making health decisions when communication with Earth is delayed.**
+
+[Live Demo]() | [GitHub Repository](https://github.com/limlining/Nasa-Interim)
+
+---
+
+## 1. About the Project
+
+INTERIM is a web-based simulation platform developed for the **2026 NASA International Space Apps Challenge**.
+
+The project focuses on the health-related challenges astronauts may face during space missions, particularly during and after Extravehicular Activities (EVA), also known as spacewalks.
+
+Astronauts working in space may experience unexpected health problems while operating in an environment where immediate medical assistance is not always available. Communication delays between astronauts and ground-based medical teams can make it difficult to receive instructions at the right time.
+
+INTERIM allows users to experience different astronaut medical situations and practise making decisions when communication with Earth is delayed or unavailable.
+
+Through medical scenarios, time-based evaluation and decision feedback, the platform aims to help users understand the importance of recognising health concerns and responding appropriately.
+
+## 2. Background and Problem Statement
+
+Space missions expose astronauts to conditions that are very different from those on Earth. Factors such as altered gravity, radiation exposure, isolation and confinement can affect their physical and mental health.
+
+These challenges are also relevant to astronauts performing Extravehicular Activities (EVA). During a spacewalk, astronauts work outside the spacecraft while wearing a spacesuit and carrying out demanding tasks. Unexpected symptoms or health concerns may require attention during or after the activity.
+
+However, astronauts cannot always depend on immediate assistance from medical teams on Earth. Communication delays or temporary interruptions may affect how quickly they receive medical guidance.
+
+In these situations, astronauts may need to assess their symptoms, consider the urgency of the situation and decide what action to take before receiving a response from the ground team.
+
+**The main problem addressed by INTERIM is how astronauts can make timely and appropriate health-related decisions when immediate communication with ground-based medical support is limited.**
+
+## 3. Our Solution
+
+INTERIM provides a scenario-based simulation where users take the role of an astronaut facing different health-related situations.
+
+Users are given information about the astronaut's condition and must choose an action based on the situation. The simulation introduces communication delays and blackout conditions to demonstrate what may happen when ground support is not immediately available.
+
+After making a decision, users receive feedback by comparing their response with the simulated ground recommendation.
+
+The system also records completed scenarios so users can review their previous decisions and performance.
+
+Rather than providing medical diagnosis, INTERIM focuses on decision-making, response time and awareness of astronaut health concerns.
+
+## 4. Target Users
+
+### Primary Target Users: EVA Astronauts
+
+INTERIM is primarily designed around the needs of astronauts performing Extravehicular Activities (EVA).
+
+During and after spacewalks, astronauts may need to pay attention to unexpected physical symptoms and determine whether further action is necessary. When communication with Earth is delayed, the ability to assess a situation independently becomes important.
+
+The simulation provides an opportunity to practise responding to different health-related situations under communication constraints.
+
+### Secondary Target Users: Long-Duration Mission Astronauts
+
+The platform can also be used as a simulation environment for astronauts participating in long-duration space missions.
+
+These astronauts may experience health concerns related to the space environment, daily activities and changes in physical or psychological well-being.
+
+### Supporting Users: Ground-Based Medical Teams
+
+Ground-based medical and mission support teams may also find the simulation useful for understanding the challenges astronauts face when making decisions without immediate guidance.
+
+## 5. Key Features
+
+### 5.1 Medical Scenario Selection
+
+INTERIM includes six simulated astronaut health scenarios:
+
+| ID | Scenario | Description |
+|---|---|---|
+| S1 | Chest Pain | Chest pain and elevated heart rate |
+| S2 | Insomnia and Low Mood | Sleep problems and changes in mood |
+| S3 | Elevated CO₂ | High CO₂ levels accompanied by headache |
+| S4 | Low Blood Pressure | Dizziness and low blood pressure |
+| S5 | Post-EVA Symptoms | Nausea and skin redness after EVA |
+| S6 | Irregular Heartbeat | Palpitations and irregular heartbeat |
+
+Users can select a scenario and review the information before deciding how to respond.
+
+### 5.2 Communication Delay and Blackout Simulation
+
+Communication with Earth is an important part of astronaut mission support. However, communication may not always be immediate.
+
+INTERIM includes two simulated communication conditions:
+
+- **Communication Delay:** Users experience a waiting period before receiving simulated ground advice.
+- **Communication Blackout:** Users must make decisions without receiving an immediate ground response.
+
+These situations allow users to experience the difficulty of making decisions when external support is limited.
+
+### 5.3 Time-Based Decision Evaluation
+
+Each scenario has its own response-time limit.
+
+The system measures how long users take to make their decisions and evaluates their responses against simulated ground recommendations.
+
+The results include:
+
+- **Too Slow:** The user takes longer than the allowed response time.
+- **Matches Ground:** The user's decision matches the simulated ground recommendation.
+- **Under-response:** The selected action is less urgent than recommended.
+- **Overreaction:** The selected action is more urgent than recommended.
+- **Acceptable:** The selected action falls within an acceptable response range.
+
+This feature highlights two important aspects of decision-making: choosing an appropriate action and making the decision within a reasonable amount of time.
+
+### 5.4 Interactive Human Body Navigation
+
+Users can explore medical scenarios through a body-location selection interface.
+
+By selecting different body regions, users can find related scenarios and navigate to the corresponding simulation.
+
+This provides another way to explore the available medical situations instead of selecting everything from a scenario list.
+
+### 5.5 Daily Wake-Up Check-In
+
+Before starting a simulation, users can complete a simple sleep and readiness check-in.
+
+The check-in introduces the importance of sleep and personal well-being during space missions.
+
+Based on the selected condition, users can be directed to a related scenario.
+
+### 5.6 Decision Log
+
+Completed scenarios are saved in the Decision Log.
+
+Users can review their previous decisions and simulation results without having to repeat the scenarios.
+
+This feature also helps users keep track of their completed training sessions.
+
+### 5.7 Performance Profile
+
+INTERIM provides a Performance Profile after users complete at least three scenarios without AI assistance.
+
+The profile summarises their decision-making performance and provides an overview of their previous simulation results.
+
+It encourages users to reflect on their decisions and identify areas where they can improve.
+
+## 6. How to Use INTERIM
+
+1. **Open the Website** – Visit the INTERIM live demo.
+2. **Complete the Check-In** – Select your current sleep and readiness condition.
+3. **Choose a Scenario** – Select a medical scenario directly or explore using the body-location interface.
+4. **Review the Situation** – Read the astronaut's symptoms and available information.
+5. **Make a Decision** – Choose an appropriate action within the scenario's response-time limit.
+6. **Receive Ground Advice** – Review the simulated ground recommendation and compare it with your decision.
+7. **Check Your Results** – View the outcome of the scenario.
+8. **Review Your Progress** – Visit the Decision Log and Performance Profile.
+
+## 7. Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| HTML5 | Structure of the web application |
+| CSS3 | Website layout, styling and responsive design |
+| JavaScript | Scenario logic, timers and user interactions |
+| Three.js | 3D human body visualization, where enabled |
+| Browser Local Storage | Saving user progress and decision records |
+| GitHub Pages | Hosting the web application |
+
+## 8. Getting Started
+
+### Live Demo
+
+The application can be accessed through the following link:
+
+https://limlining.github.io/Nasa-Interim/
+
+### Run Locally
+
+To run the project on your computer:
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/limlining/Nasa-Interim.git
+   ```
+
+2. Open the downloaded project folder.
+3. Open `index.html` using a web browser.
+4. Start using the simulation.
+
+An internet connection may be required to load externally hosted libraries and resources.
+
+## 9. Project Objectives
+
+The main objectives of INTERIM are:
+
+- To introduce health-related challenges astronauts may experience during space missions.
+- To provide a simulation environment for practising independent decision-making.
+- To demonstrate how communication delays can affect responses to medical situations.
+- To encourage timely and appropriate actions when immediate ground support is unavailable.
+- To allow users to review their decisions through recorded results and performance feedback.
+
+## 10. Future Improvements
+
+There are several areas that could be developed further:
+
+- Adding more EVA-related medical scenarios.
+- Integrating relevant NASA open datasets and astronaut health information.
+- Improving the 3D human body model and body-region selection.
+- Introducing more detailed health indicators.
+- Improving the simulation of communication delays.
+- Adding more detailed performance reports and decision analysis.
+
+## 11. Limitations and Disclaimer
+
+INTERIM is currently a simulation-based educational prototype.
+
+The medical scenarios, health information, response-time limits and ground recommendations are simulated. They are not validated medical guidelines and should not be used for actual medical diagnosis, treatment or emergency decision-making.
+
+The platform does not replace professional medical advice or provide real-time astronaut health monitoring.
+
+INTERIM is an independently developed project for the 2026 NASA Space Apps Challenge. It is not an official NASA product and is not endorsed by NASA.
+
+## 12. References and Acknowledgements
+
+- [NASA Space Apps Challenge](https://www.spaceappschallenge.org/)
+- [NASA Official Website](https://www.nasa.gov/)
+
+All external datasets, images, 3D models, libraries and other resources used in the project should be credited to their original sources and licences.
+
+---
+
+**INTERIM**
+
+*Helping astronauts make better decisions when immediate support is not available.*
