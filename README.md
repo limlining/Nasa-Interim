@@ -5,6 +5,10 @@
 
 [WebsiteDemo](https://limlining.github.io/Nasa-Interim/) 
 
+[Youtube link]()
+
+[Presentation Slide]()
+
 [GitHub Repository](https://github.com/limlining/Nasa-Interim)
 
 ---
