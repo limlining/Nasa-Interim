@@ -71,6 +71,15 @@
     .btn:active { transform: translateY(1px); }
     .lnk { background: none; border: 0; padding: 6px 0; min-height: 36px; color: var(--accent); font-weight: 600; cursor: pointer; font-size: 14px; }
 
+
+    .body3d-wrap{display:grid;grid-template-columns:minmax(0,1fr) 108px;gap:10px;align-items:center}
+    .body3d-stage{position:relative;min-height:250px;height:270px;background:radial-gradient(ellipse at center,rgba(48,166,248,.12),transparent 68%);border:1px solid var(--line);overflow:hidden;touch-action:pan-y}
+    #body3d{width:100%;height:100%;display:block;cursor:grab}#body3d:active{cursor:grabbing}
+    .body3d-hint{position:absolute;left:8px;bottom:7px;font:10px var(--font-m);color:var(--mute);pointer-events:none}
+    .body3d-controls{display:grid;gap:6px}.body3d-part{min-height:42px;padding:6px 7px;border:1px solid var(--line);background:transparent;text-align:left;cursor:pointer;font:600 12px var(--font-d);letter-spacing:.05em}
+    .body3d-part.active{border:2px solid var(--accent);background:rgba(48,166,248,.10);color:var(--accent)}
+    .body3d-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.body3d-title small{color:var(--mute);font:10px var(--font-m)}
+    @media(max-width:360px){.body3d-wrap{grid-template-columns:1fr 96px}.body3d-stage{height:235px}}
     /* Scenario List */
     .slist { list-style: none; padding: 0; border-top: 2px solid var(--ink); }
     .row { display: grid; grid-template-columns: 30px minmax(0,1fr) auto; gap: 10px; align-items: center; width: 100%; text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 12px 0; min-height: 68px; cursor: pointer; }
@@ -166,7 +175,7 @@
     .verdict { margin-top: 10px; padding: 10px 12px; border: 2px solid; font-weight: 600; }
     .verdict[data-v="match"], .verdict[data-v="ok"] { color: var(--ok); }
     .verdict[data-v="late"] { color: var(--crit); }
-    .verdict[data-v="over"] { color: var(--warn); }
+    .verdict[data-v="under"], .verdict[data-v="over"] { color: var(--warn); }
     .verdict span { display: block; font-weight: 400; font-size: 13px; color: var(--ink); margin-top: 2px; }
 
     .steps { list-style: none; padding: 0; border-top: 2px solid var(--ink); }
@@ -247,6 +256,7 @@
     </div>
   </nav>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
   (function() {
   'use strict';
@@ -285,7 +295,7 @@
 
   var SC = [
     {
-      id:'s1', hz:0, title:'Chest pain + heart rate 112', met:'MET day 214, 03:42', delay:8, bodyHighlight:'chest',
+      id:'s1', hz:0, title:'Chest pain + heart rate 112', met:'MET day 214, 03:42', delay:8, responseLimit:5, bodyHighlight:'chest',
       brief:'Ten minutes after treadmill training, a crushing pressure behind your sternum spreads to your left arm. You are sitting by the Node 2 wall.',
       vit: [V('hr', 'Heart rate', 'bpm', 112, [55,100], [45,110], 0, 1.4), V('spo2', 'SpO2', '%', 95, [97,100], [92,101], 0, .4, '', 100), V('bp', 'Blood pressure', 'mmHg', 148, [95,130], [85,160], 0, 1.5, 'bp'), V('pain', 'Chest pain /10', 'pts', 6, [0,3], [0,7], 0, .12, '', 10)],
       to: [[132,91,160,8], [120,94,152,6], [106,96,140,5], [94,98,128,3]], rate: [6.5, 3.8, 2.2, 1],
@@ -297,7 +307,7 @@
       esc:'Fainting, SpO2 below 92 or pain above 8: whole crew goes to emergency protocol.'
     },
     {
-      id:'s2', hz:1, title:'Insomnia + low mood', met:'MET day 311, 22:10', delay:12, bodyHighlight:'head',
+      id:'s2', hz:1, title:'Insomnia + low mood', met:'MET day 311, 22:10', delay:12, responseLimit:20, bodyHighlight:'head',
       brief:'Fourth night shift in a row without sleep, only three and a half hours last night.',
       vit: [V('sleep', 'Sleep last night', 'h', 3.5, [6,9], [4.5,10], 1, 0, '', 24), V('mood', 'Mood /10', 'pts', 3, [6,10], [4,10], 0, .1, '', 10), V('rhr', 'Resting HR', 'bpm', 88, [55,85], [45,100], 0, 1), V('pvt', 'Reaction time PVT', 'ms', 410, [200,300], [150,380], 0, 6)],
       to: [[3.5,2,92,440], [3.5,5,80,340], [3.5,6,78,330], [3.5,3,100,400]], rate: [3, 1, 1.2, 3.2],
@@ -309,7 +319,7 @@
       esc:'Three nights in a row under four hours of sleep: call your crew.'
     },
     {
-      id:'s3', hz:2, title:'High CO2 + headache', met:'MET day 156, 15:20', delay:10, bodyHighlight:'head',
+      id:'s3', hz:2, title:'High CO2 + headache', met:'MET day 156, 15:20', delay:10, responseLimit:8, bodyHighlight:'head',
       brief:'Assembling hardware in node module. Your head has hurt for an hour and cabin CO2 is elevated.',
       vit: [V('co2', 'Cabin CO2', 'mmHg', 5.2, [0,3], [0,5], 1, .08), V('hr', 'Heart rate', 'bpm', 84, [55,100], [45,115], 0, 1), V('spo2', 'SpO2', '%', 97, [96,100], [92,101], 0, .3, '', 100), V('head', 'Headache /10', 'pts', 5, [0,2], [0,6], 0, 1, '', 10)],
       to: [[6.8,98,96,7], [6.1,92,97,6], [3.2,76,98,2], [3.6,78,98,3]], rate: [5, 3.5, 1, 2.2],
@@ -321,7 +331,7 @@
       esc:'Reading above 6.0 or confusion: everyone masks up and goes to emergency protocol.'
     },
     {
-      id:'s4', hz:3, title:'Dizzy on standing + low BP', met:'Landing day 3, 07:05', delay:8, bodyHighlight:'body',
+      id:'s4', hz:3, title:'Dizzy on standing + low BP', met:'Landing day 3, 07:05', delay:8, responseLimit:10, bodyHighlight:'body',
       brief:'Third day on Martian surface. You get up from bunk, vision blacks out, and you steady yourself.',
       vit: [V('bp', 'Blood pressure', 'mmHg', 84, [95,130], [88,160], 0, 1.2, 'bp'), V('hr', 'Heart rate', 'bpm', 108, [55,100], [45,120], 0, 1.3), V('spo2', 'SpO2', '%', 97, [96,100], [92,101], 0, .3, '', 100), V('dz', 'Dizziness /10', 'pts', 6, [0,2], [0,6], 0, .1, '', 10)],
       to: [[76,120,96,8], [104,82,98,2], [102,84,98,2], [106,88,98,3]], rate: [5.5, .8, 1.4, 2.4],
@@ -333,7 +343,7 @@
       esc:'Still dizzy after ten minutes lying down: call crew.'
     },
     {
-      id:'s5', hz:4, title:'Nausea + red skin after EVA', met:'MET day 187, 11:48', delay:12, bodyHighlight:'body',
+      id:'s5', hz:4, title:'Nausea + red skin after EVA', met:'MET day 187, 11:48', delay:12, responseLimit:8, bodyHighlight:'body',
       brief:'Forty minutes after returning inside from spacewalk, you feel nauseous and skin is red.',
       vit: [V('nau', 'Nausea /10', 'pts', 6, [0,2], [0,6], 0, .1, '', 10), V('ery', 'Skin redness', '% body', 8, [0,2], [0,6], 0, .15), V('hr', 'Heart rate', 'bpm', 96, [55,100], [45,115], 0, 1.2), V('dose', 'Dosimeter total', 'mSv', 62, [0,20], [0,50], 0, .3)],
       to: [[8,14,108,71], [5,10,98,68], [4,8,88,63], [3,7,86,63]], rate: [5, 3.2, 1.4, 2.1],
@@ -345,7 +355,7 @@
       esc:'Persistent vomiting or rapidly rising dosimeter: all crew into shelter.'
     },
     {
-      id:'s6', hz:5, title:'Palpitations + irregular heartbeat', met:'MET day 262, 19:30', delay:9, bodyHighlight:'chest',
+      id:'s6', hz:5, title:'Palpitations + irregular heartbeat', met:'MET day 262, 19:30', delay:9, responseLimit:15, bodyHighlight:'chest',
       brief:'After dinner your chest feels like it skipped a beat. No chest pain, no fainting.',
       vit: [V('hr', 'Heart rate', 'bpm', 96, [55,90], [45,115], 0, 1.2), V('spo2', 'SpO2', '%', 98, [96,100], [92,101], 0, .3, '', 100), V('bp', 'Blood pressure', 'mmHg', 126, [95,130], [85,160], 0, 1.2, 'bp'), V('pac', 'Ectopic beats', '/min', 9, [0,5], [0,15], 0, .8)],
       to: [[82,98,122,4], [86,98,124,5], [92,98,128,7], [106,97,138,11]], rate: [.9, 1.2, 2.2, 3.6],
@@ -379,20 +389,23 @@
       out.push(gap > 0 ? 'You chose too little. Your numbers keep moving the wrong way.' : gap === 0 ? 'Your response matched symptoms and numbers begin to fall.' : 'Numbers settle, but this step was heavier than needed.');
     }
     var t = TPL[f.ideal];
-    return {id:f.id, hz:f.hz, custom:true, title:f.title, met:'Custom scenario', delay:f.delay, brief:f.brief||'Custom scenario.', vit:vit, to:to, rate:rate, out:out, ideal:f.ideal, ok:[], say:t.say, why:'This is the reference answer you set.', steps:t.steps, esc:'Any clear worsening of numbers: go up one level.'};
+    return {id:f.id, hz:f.hz, custom:true, title:f.title, met:'Custom scenario', delay:f.delay, responseLimit:10, brief:f.brief||'Custom scenario.', vit:vit, to:to, rate:rate, out:out, ideal:f.ideal, ok:[], say:t.say, why:'This is the reference answer you set.', steps:t.steps, esc:'Any clear worsening of numbers: go up one level.'};
   }
 
   function allSc() { return SC.concat(S.custom.map(gen)); }
   function findSc(id) { return allSc().filter(function(s){return s.id === id;})[0]; }
   function firstSentence(s) { var i = s.indexOf('.'); return i > -1 ? s.slice(0, i + 1) : s; }
 
-  var VT = {match:'Matches ground', ok:'Acceptable', late:'Too slow', over:'Overreaction'};
+  var VT = {match:'Matches ground', ok:'Acceptable', late:'Too slow', under:'Under-response', over:'Overreaction'};
   var STL = {ok:'Normal', warn:'Caution', crit:'Danger'};
 
-  function judge(sc, c) {
+  function judge(sc, c, decisionSecs) {
+    if (decisionSecs > (sc.responseLimit || 10)) return {v:'late', diff:c - sc.ideal, timeLate:true};
     if (c === sc.ideal) return {v:'match', diff:0};
     if (sc.ok.indexOf(c) > -1) return {v:'ok', diff:0};
-    var d = c - sc.ideal; return {v:d < 0 ? 'late' : 'over', diff:d};
+    var d = c - sc.ideal;
+    // Too Slow is determined ONLY by elapsed decision time, never by action level.
+    return {v:d < 0 ? 'under' : 'over', diff:d};
   }
 
   function stat(v, x) {
@@ -430,6 +443,7 @@
       vals: sc.vit.map(function(v){return v.start;}),
       hist: sc.vit.map(function(v){return [v.start];}),
       budget: 100, seg: null, blk: false, aided: false, ticks: {}, res: null,
+      decisionStartedAt: performance.now(), decisionSecs: null,
       last: performance.now(), hT: 0
     };
     S.view = 'run';
@@ -446,7 +460,7 @@
   function send(ev, arg) {
     var r = S.run; if (!r) return;
     var nx = T[r.phase][ev]; if (!nx) return;
-    if (ev === 'CHOOSE') { r.first = arg; setSeg(arg); }
+    if (ev === 'CHOOSE') { r.first = arg; r.decisionSecs = (performance.now() - r.decisionStartedAt) / 1000; setSeg(arg); }
     if (nx === 'result') finish(arg || 'reply');
     r.phase = nx;
     render();
@@ -457,12 +471,12 @@
     var r = S.run;
     if (!r || r.logged) return;
     r.logged = true;
-    var j = judge(r.sc, r.first);
+    var j = judge(r.sc, r.first, r.decisionSecs == null ? 0 : r.decisionSecs);
     r.res = {reason: reason, j: j};
     S.log.unshift({
       id: Date.now(), ts: Date.now(), sid: r.sc.id, title: r.sc.title, hz: r.sc.hz,
       c: r.first, ideal: r.sc.ideal, v: j.v, diff: j.diff, blk: r.blk,
-      budget: Math.round(r.budget), mins: +r.simT.toFixed(1), sw: r.changes.length,
+      budget: Math.round(r.budget), mins: +r.simT.toFixed(1), decisionSecs: +(r.decisionSecs || 0).toFixed(1), sw: r.changes.length,
       reason: reason, aided: r.aided
     });
     save();
@@ -580,16 +594,18 @@
     return '<div class="daily-check"><h3>Daily Wake-Up Check-in</h3><p style="font-size:13px">Report last night sleep quality:</p>' +
       '<div class="daily-btns"><button data-a="sleep-good">Good (&gt; 6 hrs)</button><button data-a="sleep-bad" style="color:var(--crit);border-color:var(--crit)">Bad (&lt; 5 hrs)</button></div></div>' +
       
-      '<div class="bodymap-box" style="background:var(--panel);border:1px solid var(--line);padding:12px;text-align:center;margin-bottom:14px;">' +
-      '<div class="lab" style="margin-bottom:6px">NASA Interactive Body Map (Tap Part)</div>' +
-      '<svg viewBox="0 0 100 140" style="height:110px;cursor:pointer">' +
-      '<circle data-a="filter-body" data-v="head" cx="50" cy="20" r="14" class="body-part-clickable ' + (S.bodyFilter==='head'?'active':'') + '" />' +
-      '<circle data-a="filter-body" data-v="chest" cx="50" cy="55" r="16" class="body-part-clickable ' + (S.bodyFilter==='chest'?'active':'') + '" />' +
-      '<rect data-a="filter-body" data-v="body" x="35" y="78" width="30" height="45" rx="6" class="body-part-clickable ' + (S.bodyFilter==='body'?'active':'') + '" />' +
-      '</svg>' +
-      (S.bodyFilter ? '<button class="lnk" data-a="filter-clear" style="display:block;margin:4px auto 0">Clear Body Filter (' + S.bodyFilter + ')</button>' : '') +
+      '<div class="bodymap-box panel pad" style="margin-bottom:14px;">' +
+      '<div class="body3d-title"><span class="lab">Select Body Location</span><small>3D INTERACTIVE</small></div>' +
+      '<div class="body3d-wrap"><div class="body3d-stage"><canvas id="body3d" aria-label="Interactive 3D human body. Drag to rotate and click a body region to filter scenarios."></canvas><span class="body3d-hint">DRAG TO ROTATE · TAP TO SELECT</span></div>' +
+      '<div class="body3d-controls">' +
+      '<button class="body3d-part ' + (S.bodyFilter==='head'?'active':'') + '" data-a="filter-body" data-v="head">HEAD</button>' +
+      '<button class="body3d-part ' + (S.bodyFilter==='chest'?'active':'') + '" data-a="filter-body" data-v="chest">CHEST</button>' +
+      '<button class="body3d-part ' + (S.bodyFilter==='body'?'active':'') + '" data-a="filter-body" data-v="body">ABDOMEN</button>' +
+      '<button class="body3d-part ' + (S.bodyFilter==='body'?'active':'') + '" data-a="filter-body" data-v="body">LEGS</button>' +
+      '<button class="body3d-part" data-a="filter-clear">ALL</button></div></div>' +
+      '<p class="note" style="margin:8px 0 0">Select a body part to show its linked scenarios below. Drag the model to rotate.</p>' +
+      (S.bodyFilter ? '<button class="lnk" data-a="filter-clear" style="display:block;margin:4px auto 0">Clear selection</button>' : '') +
       '</div>' +
-
       '<div class="h"><h2>Scenarios</h2><span class="cnt">' + n + '/' + SC.length + ' done</span></div><ol class="slist">' +
       all.map(function(s, i) {
         var last = S.log.filter(function(e) { return e.sid === s.id; })[0];
@@ -617,7 +633,7 @@
       ACTS.map(function(a, i) {
         return '<li><button class="ch" data-a="choose" data-v="' + i + '"><span class="k">' + (i + 1) + '</span><span><span class="n">' + a.n + '</span><span class="d">' + a.d + '</span></span></button></li>';
       }).join('') +
-      '</ol><p class="note">Once you choose, the clock starts.</p>';
+      '</ol><p class="note">Decision deadline: ' + (r.sc.responseLimit || 10) + ' seconds. The timer starts when this scenario opens.</p>';
   }
 
   function waitHTML() {
@@ -645,7 +661,8 @@
     var vd = {
       match: ref + ' made the same call.',
       ok: 'Workable. ' + ref + ' would choose "' + ACTS[sc.ideal].n + '".',
-      late: ref + ' would choose "' + ACTS[sc.ideal].n + '". You underestimated it.',
+      late: 'You took ' + r.decisionSecs.toFixed(1) + ' seconds. The response limit was ' + (sc.responseLimit || 10) + ' seconds.',
+      under: 'You decided within the time limit, but your action was below ' + ref + ' advice: ' + ACTS[sc.ideal].n + '.',
       over: ref + ' would choose "' + ACTS[sc.ideal].n + '". Step was heavier than needed.'
     };
     var why = res.reason === 'collapse' ? 'Body budget ran out.' : res.reason === 'timeout' ? 'Ground never replied.' : '';
@@ -723,6 +740,36 @@
       '<button class="btn" type="submit">Create scenario</button><button class="btn ghost" type="button" data-a="cancel" style="margin-top:0">Cancel</button></form>';
   }
 
+  function init3DBody() {
+    var canvas=$('#body3d'); if(!canvas||!window.THREE)return;
+    var T=window.THREE,w=canvas.clientWidth||250,h=canvas.clientHeight||270;
+    var scene=new T.Scene();scene.background=new T.Color(0x182421);
+    var camera=new T.PerspectiveCamera(34,w/h,.1,100);camera.position.set(0,1.0,7.4);
+    var renderer;try{renderer=new T.WebGLRenderer({canvas:canvas,antialias:true});}catch(e){canvas.parentNode.innerHTML='<p class="note" style="padding:20px">3D is unavailable in this browser. Use the body-part buttons instead.</p>';return;}
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(w,h,false);
+    scene.add(new T.HemisphereLight(0xe5f2ff,0x35443d,1.8));
+    var key=new T.DirectionalLight(0xffffff,2);key.position.set(3,5,6);scene.add(key);
+    var rim=new T.DirectionalLight(0x30a6f8,1.2);rim.position.set(-4,2,-4);scene.add(rim);
+    var model=new T.Group();scene.add(model);var clickable=[];
+    var skin=new T.MeshStandardMaterial({color:0xc99478,roughness:.72}),suit=new T.MeshStandardMaterial({color:0xdce5df,roughness:.8}),blue=new T.MeshStandardMaterial({color:0x30a6f8,roughness:.5}),dark=new T.MeshStandardMaterial({color:0x263b3a});
+    function mesh(geo,mat,x,y,z,sx,sy,sz,zone){var m=new T.Mesh(geo,mat);m.position.set(x,y,z);m.scale.set(sx||1,sy||1,sz||1);model.add(m);if(zone){m.userData.zone=zone;clickable.push(m);}return m;}
+    function ball(x,y,z,sx,sy,sz,mat,zone){return mesh(new T.SphereGeometry(1,28,20),mat,x,y,z,sx,sy,sz,zone);}
+    function limb(a,b,r,mat,zone){var A=new T.Vector3(...a),B=new T.Vector3(...b),d=new T.Vector3().subVectors(B,A),len=d.length();var m=mesh(new T.CylinderGeometry(r,r,len,18),mat,(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2,1,1,1,zone);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.normalize());ball(...a,r,r,r,mat,zone);ball(...b,r,r,r,mat,zone);}
+    ball(0,2.05,0,.46,.55,.40,skin,'head');ball(0,2.08,.34,.30,.33,.12,dark,'head');limb([0,1.52,0],[0,1.68,0],.18,skin,'head');
+    ball(0,.82,0,.72,.76,.39,suit,'chest');ball(0,.91,.35,.42,.43,.10,blue,'chest');
+    ball(0,-.08,0,.46,.45,.34,suit,'body');limb([-.22,-.35,0],[-.27,-1.35,0],.20,suit,'body');limb([.22,-.35,0],[.27,-1.35,0],.20,suit,'body');
+    limb([-.62,1.28,0],[-.92,.38,0],.16,suit,'chest');limb([.62,1.28,0],[.92,.38,0],.16,suit,'chest');
+    ball(-.94,.25,0,.16,.20,.16,skin,'chest');ball(.94,.25,0,.16,.20,.16,skin,'chest');
+    ball(-.2,.92,.45,.07,.07,.03,dark,null);ball(.2,.92,.45,.07,.07,.03,dark,null);
+    model.rotation.y=-.12;
+    var ray=new T.Raycaster(),mouse=new T.Vector2(),down=null,moved=false;
+    canvas.addEventListener('pointerdown',function(e){down={x:e.clientX,y:e.clientY,ry:model.rotation.y};moved=false;});
+    canvas.addEventListener('pointermove',function(e){if(!down)return;var dx=e.clientX-down.x,dy=e.clientY-down.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;if(moved){model.rotation.y=down.ry+dx*.012;model.rotation.x=Math.max(-.22,Math.min(.22,dy*.003));}});
+    canvas.addEventListener('pointerup',function(e){if(!down)return;if(!moved){var r=canvas.getBoundingClientRect();mouse.x=(e.clientX-r.left)/r.width*2-1;mouse.y=-((e.clientY-r.top)/r.height*2-1);ray.setFromCamera(mouse,camera);var hits=ray.intersectObjects(clickable,false);if(hits.length){S.bodyFilter=hits[0].object.userData.zone;render();}}down=null;});
+    canvas.addEventListener('pointerleave',function(){down=null;});
+    function draw(){if(!document.body.contains(canvas))return;requestAnimationFrame(draw);renderer.render(scene,camera);}draw();
+  }
+
   function render() {
     var v = S.view;
     $('#app').innerHTML = topHTML() + (v === 'home' ? homeHTML() : v === 'log' ? logHTML() : v === 'profile' ? profHTML() : v === 'new' ? newHTML() : runHTML());
@@ -732,6 +779,7 @@
       else b.removeAttribute('aria-current');
     });
     if (v === 'run') live();
+    if (v === 'home') init3DBody();
   }
 
   function num(id, lo, hi, d) {
