@@ -3,7 +3,9 @@
 
 **Making health decisions when communication with Earth is delayed.**
 
-[Live Demo]() | [GitHub Repository](https://github.com/limlining/Nasa-Interim)
+[WebsiteDemo](https://limlining.github.io/Nasa-Interim/) 
+
+[GitHub Repository](https://github.com/limlining/Nasa-Interim)
 
 ---
 
@@ -21,7 +23,7 @@ In doing so, the platform hopes to enable users to grasp the significance of bei
 
 ## 2. Background and Problem Statement
 
-Astronauts working in space face an environment which is radically different from that on Earth. The effects of factors like change in gravity, radiation exposure, and isolation/confinement could impact their physical and psychological well-being.
+Astronauts working in space face an environment which is radically different from that on Earth. The effects of factors like change in gravity, radiation exposure, and isolation could impact their physical and psychological well-being.
 
 These factors become even more important for astronauts who go out of the vehicle in order to conduct Extravehicular Activity (EVA). In an EVA, astronauts perform the assigned task outside the spaceship wearing spacesuits. Any unexpected symptom or problem needs immediate attention while conducting EVA.
 
@@ -47,17 +49,17 @@ Rather than providing medical diagnosis, INTERIM focuses on decision-making, res
 
 ### Primary Target Users: EVA Astronauts
 
-INTERIM is primarily designed around the needs of astronauts performing Extravehicular Activities (EVA).
+INTERIM is based mainly on the astronaut's requirements during Extravehicular Activity (EVA).
 
-During and after spacewalks, astronauts may need to pay attention to unexpected physical symptoms and determine whether further action is necessary. When communication with Earth is delayed, the ability to assess a situation independently becomes important.
+During the EVA and after, astronauts might have to take notice of their unexpected physical reactions and figure out what should be done next. The independence in assessment of the situation is crucial when the communication between Earth and the astronauts is lagged.
 
-The simulation provides an opportunity to practise responding to different health-related situations under communication constraints.
+This exercise offers practice in various health-related situations with limited communication.
 
 ### Secondary Target Users: Long-Duration Mission Astronauts
 
-The platform can also be used as a simulation environment for astronauts participating in long-duration space missions.
+The platform could also serve as a simulation environment for astronauts undertaking long space missions.
 
-These astronauts may experience health concerns related to the space environment, daily activities and changes in physical or psychological well-being.
+These astronauts might encounter health issues due to the space environment, routine tasks, and physical or psychological changes.
 
 ### Supporting Users: Ground-Based Medical Teams
 
@@ -169,21 +171,6 @@ The application can be accessed through the following link:
 
 https://limlining.github.io/Nasa-Interim/
 
-### Run Locally
-
-To run the project on your computer:
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/limlining/Nasa-Interim.git
-   ```
-
-2. Open the downloaded project folder.
-3. Open `index.html` using a web browser.
-4. Start using the simulation.
-
-An internet connection may be required to load externally hosted libraries and resources.
 
 ## 9. Project Objectives
 
@@ -208,22 +195,19 @@ There are several areas that could be developed further:
 
 ## 11. Limitations and Disclaimer
 
-INTERIM is currently a simulation-based educational prototype.
+INTERIM is presently a simulation-oriented educational prototype.
 
-The medical scenarios, health information, response-time limits and ground recommendations are simulated. They are not validated medical guidelines and should not be used for actual medical diagnosis, treatment or emergency decision-making.
+The medical situations, health data, time constraints, and ground recommendations are simulated. They are not medically verified guidelines and must not be relied upon for any medical decision-making or diagnosis.
 
-The platform does not replace professional medical advice or provide real-time astronaut health monitoring.
+This software does not serve as an alternative to professional medical advice and is not capable of providing real-time health monitoring of astronauts.
 
-INTERIM is an independently developed project for the 2026 NASA Space Apps Challenge. It is not an official NASA product and is not endorsed by NASA.
+This project is independently built as part of the NASA Space Apps challenge of 2026 and is not officially associated with NASA.
 
 ## 12. References and Acknowledgements
 
 - [NASA Space Apps Challenge](https://www.spaceappschallenge.org/)
 - [NASA Official Website](https://www.nasa.gov/)
 
-All external datasets, images, 3D models, libraries and other resources used in the project should be credited to their original sources and licences.
-
----
 
 **INTERIM**
 
