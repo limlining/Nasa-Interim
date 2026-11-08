@@ -13,21 +13,21 @@ INTERIM is a web-based simulation platform developed for the **2026 NASA Interna
 
 The project focuses on the health-related challenges astronauts may face during space missions, particularly during and after Extravehicular Activities (EVA), also known as spacewalks.
 
-Astronauts working in space may experience unexpected health problems while operating in an environment where immediate medical assistance is not always available. Communication delays between astronauts and ground-based medical teams can make it difficult to receive instructions at the right time.
+Unexpected health conditions can affect astronauts when working in space as it is not always possible to obtain immediate medical care in that setting. Astronauts cannot easily obtain directions from their counterparts on the ground due to delays in communication.
 
-INTERIM allows users to experience different astronaut medical situations and practise making decisions when communication with Earth is delayed or unavailable.
+INTERIM enables users to go through various experiences related to medical emergencies for astronauts with delay in or lack of communication from the ground.
 
-Through medical scenarios, time-based evaluation and decision feedback, the platform aims to help users understand the importance of recognising health concerns and responding appropriately.
+In doing so, the platform hopes to enable users to grasp the significance of being aware of health issues and acting upon them.
 
 ## 2. Background and Problem Statement
 
-Space missions expose astronauts to conditions that are very different from those on Earth. Factors such as altered gravity, radiation exposure, isolation and confinement can affect their physical and mental health.
+Astronauts working in space face an environment which is radically different from that on Earth. The effects of factors like change in gravity, radiation exposure, and isolation/confinement could impact their physical and psychological well-being.
 
-These challenges are also relevant to astronauts performing Extravehicular Activities (EVA). During a spacewalk, astronauts work outside the spacecraft while wearing a spacesuit and carrying out demanding tasks. Unexpected symptoms or health concerns may require attention during or after the activity.
+These factors become even more important for astronauts who go out of the vehicle in order to conduct Extravehicular Activity (EVA). In an EVA, astronauts perform the assigned task outside the spaceship wearing spacesuits. Any unexpected symptom or problem needs immediate attention while conducting EVA.
 
-However, astronauts cannot always depend on immediate assistance from medical teams on Earth. Communication delays or temporary interruptions may affect how quickly they receive medical guidance.
+The astronauts do not always have access to medical assistance from the doctors present on Earth. Delay or interruption in communication could have an impact on getting advice from the doctors on Earth.
 
-In these situations, astronauts may need to assess their symptoms, consider the urgency of the situation and decide what action to take before receiving a response from the ground team.
+In such scenarios, the astronauts will have to analyze the problem faced by them and the urgency involved in the issue before taking any action.
 
 **The main problem addressed by INTERIM is how astronauts can make timely and appropriate health-related decisions when immediate communication with ground-based medical support is limited.**
 
