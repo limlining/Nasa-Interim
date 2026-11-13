@@ -3,7 +3,7 @@
 
 **Making health decisions when communication with Earth is delayed.**
 
-[WebsiteDemo](https://limlining.github.io/Nasa-Interim/) 
+[LiveDemo](https://limlining.github.io/Nasa-Interim/) 
 
 [Youtube link]()
 
