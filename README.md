@@ -7,7 +7,7 @@
 
 [Youtube link]()
 
-[Presentation Slide]()
+[Presentation Slide](https://github.com/limlining/Nasa-Interim/blob/main/INTERIM_Final_Revised_Presentation.pdf)
 
 [GitHub Repository](https://github.com/limlining/Nasa-Interim)
 
