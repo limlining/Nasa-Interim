@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>AstroPulse: DeepSpace Triage</title>
+  <title>INTERIM | Astronaut Health Assessment &amp; Decision Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -80,6 +80,39 @@
     .body3d-part.active{border:2px solid var(--accent);background:rgba(48,166,248,.10);color:var(--accent)}
     .body3d-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.body3d-title small{color:var(--mute);font:10px var(--font-m)}
     @media(max-width:360px){.body3d-wrap{grid-template-columns:1fr 96px}.body3d-stage{height:235px}}
+
+    .nav div { grid-template-columns: repeat(5,1fr); }
+    .nav button { font-size: 11px; letter-spacing: .08em; }
+    .section-intro { color:var(--mute); font-size:13px; margin:4px 0 12px; }
+    .info-grid { display:grid; gap:8px; margin-top:10px; }
+    .info-card { background:var(--panel); border:1px solid var(--line); padding:11px; }
+    .info-card h3 { font:600 15px var(--font-d); letter-spacing:.08em; text-transform:uppercase; margin-bottom:5px; }
+    .info-card p { font-size:12.5px; margin-top:5px; }
+    .info-card b { color:var(--ink); }
+    .risk-box { padding:11px; border:1px solid var(--line); background:var(--panel); margin:10px 0; }
+    .risk-box[data-level="high"] { border-color:var(--crit); }
+    .risk-box[data-level="caution"] { border-color:var(--warn); }
+    .risk-box[data-level="low"] { border-color:var(--ok); }
+    .risk-label { font:600 12px var(--font-d); letter-spacing:.12em; text-transform:uppercase; }
+    .risk-box p { font-size:12.5px; margin-top:4px; }
+    .mini-label { font:500 10px var(--font-m); color:var(--mute); letter-spacing:.06em; text-transform:uppercase; }
+    .guide-list { padding-left:18px; margin-top:7px; }
+    .guide-list li { padding:3px 0; font-size:12.5px; }
+    .health-form { display:grid; gap:9px; margin-top:10px; }
+    .health-form label { display:grid; gap:4px; font-size:13px; }
+    .health-form select { width:100%; min-height:42px; background:var(--bg); color:var(--ink); border:1px solid var(--line); padding:7px; }
+    .trend-grid { display:grid; gap:10px; margin-top:12px; }
+    .trend-card { background:var(--panel); border:1px solid var(--line); padding:11px; }
+    .trend-head { display:flex; justify-content:space-between; gap:8px; align-items:baseline; }
+    .trend-head b { font:600 14px var(--font-d); letter-spacing:.08em; text-transform:uppercase; }
+    .trend-value { font:500 18px var(--font-m); }
+    .trend-svg { width:100%; height:66px; display:block; margin-top:5px; }
+    .trend-svg path { fill:none; stroke:var(--accent); stroke-width:2; }
+    .trend-svg line { stroke:var(--line); stroke-width:1; stroke-dasharray:3 3; }
+    .empty-trend { border:1px dashed var(--line); padding:14px; color:var(--mute); font-size:13px; margin-top:10px; }
+    .disclaimer-small { font-size:11px; color:var(--mute); margin-top:9px; }
+    @media(max-width:360px) { .nav button {font-size:10px;letter-spacing:.02em;} }
+
     /* Scenario List */
     .slist { list-style: none; padding: 0; border-top: 2px solid var(--ink); }
     .row { display: grid; grid-template-columns: 30px minmax(0,1fr) auto; gap: 10px; align-items: center; width: 100%; text-align: left; background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 12px 0; min-height: 68px; cursor: pointer; }
@@ -242,8 +275,12 @@
     .daily-check { background: var(--panel); border: 1px solid var(--accent); padding: 12px; margin-bottom: 16px; }
     .daily-check h3 { font: 600 14px var(--font-d); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
     .daily-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .daily-btns .done-checkin { opacity:1; color:var(--ok); border-color:var(--ok); cursor:default; font-weight:700; }
     .daily-btns button { padding: 8px; border: 1px solid var(--ink); background: var(--bg); font: 600 12.5px var(--font-b); cursor: pointer; }
-  </style>
+    .nasa-map { display:grid; grid-template-columns:repeat(auto-fit,minmax(245px,1fr)); gap:10px; }
+    .nasa-row h3 { margin:5px 0 8px; }
+    .nasa-status { display:inline-block; font:600 10px var(--font-b); letter-spacing:.08em; text-transform:uppercase; color:var(--accent); border:1px solid var(--line); padding:4px 7px; }
+</style>
 </head>
 <body>
 
@@ -251,6 +288,7 @@
   <nav class="nav" id="nav">
     <div>
       <button data-a="tab" data-v="home">Scenarios</button>
+      <button data-a="tab" data-v="health">Health</button>
       <button data-a="tab" data-v="log">Log</button>
       <button data-a="tab" data-v="profile">Profile</button>
     </div>
@@ -265,12 +303,12 @@
 
   var KEY = 'interim.en.v2', mem = {};
   function load() { try { var j = localStorage.getItem(KEY); return j ? JSON.parse(j) : mem; } catch(e) { return mem; } }
-  function save() { mem = {log: S.log, custom: S.custom}; try { localStorage.setItem(KEY, JSON.stringify(mem)); } catch(e) {} }
+  function save() { mem = {log: S.log, custom: S.custom, checkins: S.checkins, wakeCheckin: S.wakeCheckin}; try { localStorage.setItem(KEY, JSON.stringify(mem)); } catch(e) {} }
   var saved = load();
 
   var S = {
     view: 'home', blackout: false, speed: 12, log: saved.log || [],
-    custom: saved.custom || [], run: null, armClear: false,
+    custom: saved.custom || [], checkins: saved.checkins || [], wakeCheckin: saved.wakeCheckin || null, run: null, armClear: false,
   bodyFilter: null
   };
 
@@ -477,7 +515,8 @@
       id: Date.now(), ts: Date.now(), sid: r.sc.id, title: r.sc.title, hz: r.sc.hz,
       c: r.first, ideal: r.sc.ideal, v: j.v, diff: j.diff, blk: r.blk,
       budget: Math.round(r.budget), mins: +r.simT.toFixed(1), decisionSecs: +(r.decisionSecs || 0).toFixed(1), sw: r.changes.length,
-      reason: reason, aided: r.aided
+      reason: reason, aided: r.aided,
+      vitals: r.sc.vit.map(function(v, i) { return {key:v.key, label:v.label, unit:v.unit, value:+r.vals[i].toFixed(v.dp)}; })
     });
     save();
   }
@@ -575,7 +614,7 @@
   function guideSteps(r) { return r.cur === r.sc.ideal ? r.sc.steps : TPL[r.cur].steps; }
 
   function topHTML() {
-    return '<header class="top"><div class="mark"><i></i><div><b>INTERIM</b><small>Comms-delay decision trainer</small></div></div>' +
+    return '<header class="top"><div class="mark"><i></i><div><b>INTERIM</b><small>Astronaut health assessment + decision support</small></div></div>' +
       '<button class="sw" role="switch" aria-checked="' + S.blackout + '" data-a="blk"><span>Comms<br>blackout</span><span class="t"><i></i></span></button></header>' +
       '<div class="strip"><span>MET <b>day 214</b></span><span>Ground delay <b>8-12 min</b></span><span class="' + (S.blackout ? 'lost' : '') + '">Link <b>' + (S.blackout ? 'LOST' : 'OK') + '</b></span></div>' +
       (S.blackout ? '<div class="banner">Comms blackout is on: countdown is gone and ground advice will not arrive. Use offline manual.</div>' : '');
@@ -591,8 +630,12 @@
 
     var n = SC.filter(function(s) { return done[s.id]; }).length;
 
-    return '<div class="daily-check"><h3>Daily Wake-Up Check-in</h3><p style="font-size:13px">Report last night sleep quality:</p>' +
-      '<div class="daily-btns"><button data-a="sleep-good">Good (&gt; 6 hrs)</button><button data-a="sleep-bad" style="color:var(--crit);border-color:var(--crit)">Bad (&lt; 5 hrs)</button></div></div>' +
+    var wakeDone = S.wakeCheckin && new Date(S.wakeCheckin.ts).toDateString() === new Date().toDateString();
+    return '<div class="daily-check"><h3>Daily Wake-Up Check-in</h3><p style="font-size:13px">' + (wakeDone ? 'Today’s sleep check-in is completed.' : 'Report last night sleep quality:') + '</p>' +
+      '<div class="daily-btns">' + (wakeDone
+        ? '<button type="button" disabled class="done-checkin">✓ Done</button>'
+        : '<button data-a="sleep-good">Good (&gt; 6 hrs)</button><button data-a="sleep-bad" style="color:var(--crit);border-color:var(--crit)">Bad (&lt; 5 hrs)</button>') +
+      '</div></div>' +
       
       '<div class="bodymap-box panel pad" style="margin-bottom:14px;">' +
       '<div class="body3d-title"><span class="lab">Select Body Location</span><small>3D INTERACTIVE</small></div>' +
@@ -622,18 +665,147 @@
     }).join('');
   }
 
+
+  var INDICATORS = {
+    hr: {what:'Heart rate is the number of heartbeats per minute.', why:'It helps show how the cardiovascular system is responding to activity or stress.', space:'Exercise, workload, stress, hydration and spaceflight-related fluid shifts can influence heart rate. A single reading does not identify a cause.'},
+    spo2: {what:'SpO₂ is an estimate of the percentage of haemoglobin carrying oxygen.', why:'It helps monitor oxygenation alongside symptoms and other measurements.', space:'The reading can be affected by sensor fit, movement, circulation and equipment conditions. Check the measurement quality before interpreting it.'},
+    bp: {what:'Blood pressure describes the force of blood against artery walls. This scenario records a simplified systolic value.', why:'It can help identify changes in circulation, especially when considered with posture and symptoms.', space:'Fluid shifts, hydration, posture and adaptation to altered gravity can affect cardiovascular responses. The displayed diastolic value is an illustrative estimate, not a separate measurement.'},
+    sleep: {what:'Sleep duration is the amount of time spent asleep during the previous sleep period.', why:'Sleep supports attention, reaction time, mood and day-to-day functioning.', space:'Shift schedules, lighting, noise, workload and disrupted routines can affect sleep during missions.'},
+    mood: {what:'Mood is a self-reported check-in on how the person feels.', why:'A regular check-in can help notice changes over time and prompt a conversation when concerns persist.', space:'Isolation, workload, disrupted sleep and distance from family can affect well-being. A score alone is not a mental-health diagnosis.'},
+    rhr: {what:'Resting heart rate is the number of heartbeats per minute while resting.', why:'Tracking it over time can help identify changes from a person’s usual pattern.', space:'Sleep, stress, hydration, illness, exercise and adaptation to spaceflight may influence the reading.'},
+    pvt: {what:'PVT is a reaction-time task; this scenario records response time in milliseconds.', why:'It is used as one way to observe alertness and sustained attention.', space:'Sleep loss, circadian disruption and workload can affect reaction time. One result should be interpreted in context.'},
+    co2: {what:'Cabin CO₂ is the carbon-dioxide level measured in the cabin environment. Elevated CO₂ is a hypercapnia-related environmental concern; it is not the same as hypoxia (insufficient oxygen in body tissues).', why:'It helps assess cabin air quality and whether ventilation or carbon-dioxide removal needs attention.', space:'A high reading can point to an environmental-system issue. Headache is non-specific, so the reading and symptoms should be assessed together. SpO₂ and CO₂ are different measurements.'},
+    head: {what:'Headache severity is a self-reported symptom score from 0 to 10.', why:'Tracking severity and changes can help communicate whether symptoms are improving or worsening.', space:'Headache can have many causes, including environmental conditions, sleep loss, dehydration or elevated CO₂. The score does not identify the cause.'},
+    pain: {what:'Chest-pain severity is a self-reported score from 0 to 10.', why:'Chest discomfort with other symptoms or abnormal measurements needs prompt attention.', space:'Do not assume chest pain is caused by exercise or stress. This simulation treats concerning chest pain as requiring urgent crew assessment.'},
+    nau: {what:'Nausea severity is a self-reported score from 0 to 10.', why:'It helps track symptom intensity and whether it is changing.', space:'Motion, workload, medication, illness and other factors may contribute. Nausea after EVA should be assessed with the full mission context.'},
+    ery: {what:'Skin redness is a visual symptom observation recorded as an estimated percentage in this scenario.', why:'A change in skin appearance should be documented with timing, location and other symptoms.', space:'Irritation, pressure, temperature and other factors can affect skin appearance. This simulation does not determine the cause.'},
+    dose: {what:'A dosimeter records radiation exposure over time; the scenario shows a cumulative value in mSv.', why:'Exposure records help the crew compare readings with mission procedures and radiation-protection guidance.', space:'Exposure depends on mission conditions, shielding, location and time. A dose reading is not by itself a diagnosis of radiation sickness.'},
+    dz: {what:'Dizziness severity is a self-reported score from 0 to 10.', why:'It is important to note when it occurs, especially with standing, faintness or changes in blood pressure.', space:'Posture and fluid shifts can affect circulation. Dizziness with fainting, chest pain or worsening symptoms needs prompt crew attention.'},
+    pac: {what:'Ectopic beats are extra or early heartbeats recorded per minute in this scenario.', why:'A change in rhythm should be considered together with symptoms, heart rate and ECG assessment.', space:'Stress, sleep loss, stimulants and other conditions can influence palpitations. This display is a simulation, not an ECG diagnosis.'}
+  };
+
+  var PREVENTION = {
+    s1: ['Follow the mission exercise and recovery plan; avoid restarting activity while symptoms are being assessed.', 'Report new chest discomfort immediately rather than waiting for it to pass.', 'Use only medications and procedures included in the approved mission medical protocol.'],
+    s2: ['Keep a consistent sleep and wake schedule when mission operations allow.', 'Use the planned light environment: brighter light during the intended wake period and reduced light before sleep.', 'Include scheduled exercise and a brief daily mood check-in.', 'Report persistent low mood or repeated short sleep to the crew medical support team.'],
+    s3: ['Follow cabin air-quality monitoring and ventilation procedures.', 'Report repeated CO₂ alerts or headaches; do not treat the symptom while ignoring a possible cabin source.', 'Keep air inlets and ventilation paths clear according to spacecraft procedures.'],
+    s4: ['Follow the mission exercise, hydration and nutrition plan.', 'Change posture gradually after rest; pause if dizziness occurs.', 'Record when dizziness happens and whether it improves with rest.', 'Report repeated dizziness, fainting or symptoms that do not settle.'],
+    s5: ['Follow EVA suit checks, radiation-monitoring procedures and post-EVA health checks.', 'Know the designated shelter location and follow mission radiation-protection instructions.', 'Record symptom onset and dosimeter readings after EVA.', 'Report persistent nausea, skin changes or other new symptoms.'],
+    s6: ['Record when palpitations occur, how long they last and any associated symptoms.', 'Follow mission guidance on sleep, hydration and stimulant use.', 'Report repeated or worsening palpitations, especially with chest pain, breathlessness or faintness.', 'Use the prescribed monitoring equipment and crew medical procedures.']
+  };
+
+  function assessmentHTML(sc, values) {
+    var flagged = [], critical = 0, caution = 0;
+    var cards = sc.vit.map(function(v, i) {
+      var x = values[i], state = stat(v, x), info = INDICATORS[v.key] || {
+        what: v.label + ' is a simulated health or environmental indicator.',
+        why: 'It is included to help users review the scenario.',
+        space: 'Interpret it with the full situation and mission procedures; this reading alone does not identify a diagnosis.'
+      };
+      if (state === 'crit') { critical++; flagged.push(v.label); }
+      else if (state === 'warn') { caution++; flagged.push(v.label); }
+      return '<article class="info-card"><h3>' + esc(v.label) + ' · ' + esc(fmt(v, x)) + ' ' + esc(v.unit) + '</h3>' +
+        '<p><b>What is it?</b> ' + esc(info.what) + '</p>' +
+        '<p><b>Why monitor it?</b> ' + esc(info.why) + '</p>' +
+        '<p><b>What can affect it in space?</b> ' + esc(info.space) + '</p>' +
+        '<p><b>Scenario flag:</b> ' + (state === 'crit' ? 'Outside this scenario’s critical reference band.' : state === 'warn' ? 'Outside this scenario’s usual band.' : 'Within this scenario’s reference band.') + '</p></article>';
+    }).join('');
+    var level = critical >= 2 ? 'high' : critical === 1 ? 'caution' : caution ? 'caution' : 'low';
+    var label = level === 'high' ? 'Multiple critical flags' : level === 'caution' ? 'Needs attention' : 'No current reference-band flags';
+    var summary = flagged.length ? 'Flagged indicators: ' + flagged.join(', ') + '. Review the symptoms and scenario escalation instructions.' : 'No indicators are outside the scenario reference bands. Continue to consider symptoms and the full mission context.';
+    return '<div class="h"><h2>Health assessment</h2><span class="cnt">scenario read-out</span></div>' +
+      '<div class="risk-box" data-level="' + level + '"><div class="risk-label">' + label + '</div><p>' + esc(summary) + '</p>' +
+      '<p class="disclaimer-small">Training flag only. These scenario ranges are illustrative, not validated clinical thresholds or a medical diagnosis. Follow mission medical procedures.</p></div>' +
+      '<div class="info-grid">' + cards + '</div>';
+  }
+
+  function preventionHTML(sc) {
+    var tips = PREVENTION[sc.id] || ['Follow the mission health and safety procedures.', 'Record changes in symptoms and measurements.', 'Report persistent or worsening concerns to the crew medical support team.'];
+    return '<div class="h"><h2>Prevention & follow-up</h2></div><div class="panel pad"><div class="lab">Practical guidance for this scenario</div><ul class="guide-list">' +
+      tips.map(function(x) { return '<li>' + esc(x) + '</li>'; }).join('') +
+      '</ul><p class="disclaimer-small">General training guidance only. Mission-specific flight rules and medical protocols take priority.</p></div>';
+  }
+
+
+  function healthHTML() {
+    var latest = S.checkins.length ? S.checkins[0] : null;
+    var indicatorKeys = ['hr','spo2','bp','sleep','mood','rhr','pvt','co2','dose'];
+    var cards = indicatorKeys.map(function(k) {
+      var d = INDICATORS[k];
+      var label = ({hr:'Heart rate',spo2:'SpO₂',bp:'Blood pressure',sleep:'Sleep duration',mood:'Mood check-in',rhr:'Resting heart rate',pvt:'Reaction time (PVT)',co2:'Cabin CO₂',dose:'Radiation dosimeter'})[k];
+      return '<article class="info-card"><h3>' + label + '</h3><p>' + esc(d.what) + '</p><p><b>Why monitor:</b> ' + esc(d.why) + '</p><p><b>Spaceflight context:</b> ' + esc(d.space) + '</p></article>';
+    }).join('');
+    return '<div class="h"><h2>Health assessment guide</h2></div>' +
+      '<p class="section-intro">A quick guide to the indicators used in the simulations. Readings are simulated and should be interpreted with symptoms and mission procedures.</p>' +
+      '<div class="info-grid">' + cards + '</div>' +
+      '<div class="h"><h2>Prevention reminders</h2></div><div class="info-grid">' +
+      '<article class="info-card"><h3>Sleep</h3><p>Keep a consistent sleep opportunity, reduce bright light and screen exposure before the planned sleep period, and report persistent sleep disruption.</p></article>' +
+      '<article class="info-card"><h3>Light & routine</h3><p>Use mission-approved lighting schedules and maintain a regular wake, work and rest routine where operations allow.</p></article>' +
+      '<article class="info-card"><h3>Exercise & recovery</h3><p>Follow the prescribed exercise and recovery plan. Avoid changing exercise intensity when new symptoms are being assessed.</p></article>' +
+      '<article class="info-card"><h3>Mood & support</h3><p>Use regular mood check-ins, maintain contact with crewmates and report persistent changes that affect daily functioning.</p></article>' +
+      '</div>';
+  }
+
+  function trendPath(vals) {
+    if (!vals.length) return '';
+    var nums = vals.map(function(x) { return +x.value; });
+    var min = Math.min.apply(null, nums), max = Math.max.apply(null, nums);
+    if (max === min) { min -= 1; max += 1; }
+    return nums.map(function(y, i) {
+      var x = vals.length === 1 ? 50 : 4 + i / (vals.length - 1) * 92;
+      var py = 54 - ((y - min) / (max - min)) * 46;
+      return (i ? 'L' : 'M') + x.toFixed(1) + ' ' + py.toFixed(1);
+    }).join(' ');
+  }
+
+  function trendsHTML() {
+    var groups = {};
+    S.log.slice().reverse().forEach(function(entry) {
+      (entry.vitals || []).forEach(function(v) {
+        if (!groups[v.key]) groups[v.key] = {label:v.label, unit:v.unit, points:[]};
+        groups[v.key].points.push({value:v.value, ts:entry.ts, title:entry.title});
+      });
+    });
+    var checkins = S.checkins.slice().reverse();
+    if (checkins.length) {
+      groups.sleepCheck = {label:'Sleep duration',unit:'hours',points:checkins.map(function(c){return {value:c.sleep,ts:c.ts,title:'Daily check-in'};})};
+      groups.moodCheck = {label:'Mood check-in',unit:'/10',points:checkins.map(function(c){return {value:c.mood,ts:c.ts,title:'Daily check-in'};})};
+    }
+    var keys = Object.keys(groups);
+    var charts = keys.map(function(k) {
+      var g = groups[k], pts = g.points.slice(-10), last = pts[pts.length - 1];
+      return '<article class="trend-card"><div class="trend-head"><b>' + esc(g.label) + '</b><span class="trend-value">' + esc(String(last.value)) + ' <small>' + esc(g.unit) + '</small></span></div>' +
+        '<svg class="trend-svg" viewBox="0 0 100 60" preserveAspectRatio="none" role="img" aria-label="' + esc(g.label) + ' trend"><line x1="0" y1="54" x2="100" y2="54"></line><path d="' + trendPath(pts) + '"></path></svg>' +
+        '<div class="mini-label">' + pts.length + ' recorded point(s) · latest ' + new Date(last.ts).toLocaleDateString() + '</div></article>';
+    }).join('');
+    return '<div class="h"><h2>Health history</h2><span class="cnt">' + keys.length + ' indicators</span></div>' +
+      '<p class="section-intro">Trends are built from completed simulation snapshots and saved daily check-ins on this device. A chart appears after data has been recorded for that indicator.</p>' +
+      (charts || '<div class="empty-trend">No health history yet. Complete a scenario or save a daily check-in to start building your trend history.</div>') +
+      '<p class="disclaimer-small">These are simulated training records, not live spacecraft telemetry or actual astronaut health data. Compare like-for-like measurements only; different scenarios may use different conditions.</p>';
+  }
+
   function briefHTML() {
     var r = S.run;
-    var fl = r.sc.vit.map(function(v, i) {
-      var x = +r.vals[i].toFixed(v.dp), s = stat(v, x);
-      return s === 'ok' ? null : v.label + ' ' + fmt(v, r.vals[i]) + ' ' + v.unit + ' (' + STL[s] + ')';
-    }).filter(Boolean);
-    var ai = r.aided ? '<div class="rec"><b>Interim suggests: ' + ACTS[r.sc.ideal].n + '</b><p>' + esc(r.sc.why) + '</p></div>' : '<button class="lnk" data-a="aid">Ask Interim for a recommendation</button><p class="note" style="margin-top:0">Aided decisions are not scored in profile.</p>';
-    return '<div class="h"><h2>Interim read-out</h2></div><div class="panel pad"><div class="lab">' + HAZ[r.sc.hz][0] + ' ' + HAZ[r.sc.hz][1] + '</div><p style="margin:4px 0 8px">Flagged: ' + (fl.length ? esc(fl.join(', ')) : 'nothing out of range') + '.</p>' + ai + '</div><div class="h"><h2>Your call</h2></div><ol class="choices">' +
-      ACTS.map(function(a, i) {
+    var flagged = [];
+    var critical = 0, caution = 0;
+    r.sc.vit.forEach(function(v, i) {
+      var state = stat(v, +r.vals[i].toFixed(v.dp));
+      if (state === 'crit') { critical++; flagged.push(v.label + ' ' + fmt(v, r.vals[i]) + ' ' + v.unit); }
+      else if (state === 'warn') { caution++; flagged.push(v.label + ' ' + fmt(v, r.vals[i]) + ' ' + v.unit); }
+    });
+    var level = critical >= 2 ? 'HIGH RISK' : (critical === 1 || caution > 0) ? 'NEEDS ATTENTION' : 'NO REFERENCE-BAND FLAGS';
+    var ai = r.aided
+      ? '<div class="rec"><b>Interim suggests: ' + ACTS[r.sc.ideal].n + '</b><p>' + esc(r.sc.why) + '</p></div>'
+      : '<button class="lnk" data-a="aid">Ask Interim for a recommendation</button>';
+    return '<div class="risk-box" data-level="' + (critical >= 2 ? 'high' : (critical || caution) ? 'caution' : 'low') + '">' +
+      '<div class="risk-label">' + level + '</div>' +
+      '<p>' + (flagged.length ? 'Check: ' + esc(flagged.join(' · ')) : 'No scenario indicator is outside its reference band. Continue to assess the symptoms.') + '</p>' +
+      '<p class="disclaimer-small">Simulation guidance only. Follow mission medical procedures.</p></div>' +
+      '<div class="h"><h2>Choose your action</h2></div>' +
+      '<ol class="choices">' + ACTS.map(function(a, i) {
         return '<li><button class="ch" data-a="choose" data-v="' + i + '"><span class="k">' + (i + 1) + '</span><span><span class="n">' + a.n + '</span><span class="d">' + a.d + '</span></span></button></li>';
-      }).join('') +
-      '</ol><p class="note">Decision deadline: ' + (r.sc.responseLimit || 10) + ' seconds. The timer starts when this scenario opens.</p>';
+      }).join('') + '</ol>' +
+      '<div class="panel pad"><div class="lab">Optional support</div>' + ai + '</div>' +
+      '<p class="note">Decision deadline: ' + (r.sc.responseLimit || 10) + ' seconds. Make your call based on the symptoms and available indicators.</p>';
   }
 
   function waitHTML() {
@@ -718,13 +890,18 @@
 
   function profHTML() {
     var p = prof(), n = S.log.filter(function(e) { return !e.aided; }).length;
-    if (!p) return '<div class="h"><h2>Decision profile</h2></div><div class="panel pad"><p>Finish at least 3 scenarios to generate a profile. You have ' + n + ' so far.</p><div class="bar" style="margin-top:10px"><i style="width:' + (n / 3 * 100) + '%"></i></div></div>' +
-      '<p class="note">Complete at least 3 real scenarios to generate your decision profile. Your completed scenarios will appear in the Log.</p>';
-    var pos = Math.max(-2, Math.min(2, p.avg)), pct = (pos + 2) / 4 * 100;
-    return '<div class="h"><h2>Decision profile</h2><span class="cnt">from ' + p.n + ' decisions</span></div>' +
-      '<div class="panel pad"><div class="lab">Your type</div><div class="ptype">' + p.title + '</div><p>' + p.text + '</p>' +
-      '<div class="gauge" role="img" aria-label="Average bias ' + sg(p.avg) + ' levels"><i class="dot" style="left:' + pct + '%"></i></div><div class="gl"><span>- Over-waiting</span><span>Calibrated</span><span>Over-reacting +</span></div>' +
-      '<div class="stats"><div><b>' + Math.round(p.good / p.n * 100) + '%</b><span>Matched ground</span></div><div><b>' + p.late + '</b><span>Too slow</span></div><div><b>' + p.over + '</b><span>Overreactions</span></div></div></div>';
+    var profile = '';
+    if (!p) {
+      profile = '<div class="h"><h2>Decision profile</h2></div><div class="panel pad"><p>Finish at least 3 scenarios to generate a profile. You have ' + n + ' so far.</p><div class="bar" style="margin-top:10px"><i style="width:' + Math.min(100, n / 3 * 100) + '%"></i></div></div>' +
+        '<p class="note">Complete at least 3 real scenarios to generate your decision profile. Your completed scenarios will appear in the Log.</p>';
+    } else {
+      var pos = Math.max(-2, Math.min(2, p.avg)), pct = (pos + 2) / 4 * 100;
+      profile = '<div class="h"><h2>Decision profile</h2><span class="cnt">from ' + p.n + ' decisions</span></div>' +
+        '<div class="panel pad"><div class="lab">Your type</div><div class="ptype">' + p.title + '</div><p>' + p.text + '</p>' +
+        '<div class="gauge" role="img" aria-label="Average bias ' + sg(p.avg) + ' levels"><i class="dot" style="left:' + pct + '%"></i></div><div class="gl"><span>- Over-waiting</span><span>Calibrated</span><span>Over-reacting +</span></div>' +
+        '<div class="stats"><div><b>' + Math.round(p.good / p.n * 100) + '%</b><span>Matched ground</span></div><div><b>' + p.late + '</b><span>Too slow</span></div><div><b>' + p.over + '</b><span>Overreactions</span></div></div></div>';
+    }
+    return profile + trendsHTML();
   }
 
   function newHTML() {
@@ -772,7 +949,7 @@
 
   function render() {
     var v = S.view;
-    $('#app').innerHTML = topHTML() + (v === 'home' ? homeHTML() : v === 'log' ? logHTML() : v === 'profile' ? profHTML() : v === 'new' ? newHTML() : runHTML());
+    $('#app').innerHTML = topHTML() + (v === 'home' ? homeHTML() : v === 'health' ? healthHTML() : v === 'log' ? logHTML() : v === 'profile' ? profHTML() : v === 'new' ? newHTML() : runHTML());
     var nav = $('#nav'); nav.hidden = (v === 'run' || v === 'new');
     nav.querySelectorAll('button').forEach(function(b) {
       if (b.dataset.v === v) b.setAttribute('aria-current', 'page');
@@ -837,8 +1014,20 @@
   else if (a === 'filter-clear') { 
     S.bodyFilter = null; render(); 
   }
-  else if (a === 'sleep-good') { 
-    alert('Sleep status recorded: Normal readiness.'); 
+  else if (a === 'save-checkin') {
+    var sl = $('#check-sleep'), mo = $('#check-mood');
+    if (sl && mo) {
+      S.checkins.unshift({ts:Date.now(), sleep:+sl.value, mood:+mo.value});
+      if (S.checkins.length > 60) S.checkins.length = 60;
+      save();
+      render();
+      window.scrollTo(0, 0);
+    }
+  }
+  else if (a === 'sleep-good') {
+    S.wakeCheckin = {ts:Date.now(), status:'good'};
+    save();
+    render();
   }
   else if (a === 'sleep-bad') {
     // Bad sleep check-in opens the Insomnia + low mood scenario directly.
