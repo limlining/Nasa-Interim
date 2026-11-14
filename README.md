@@ -19,7 +19,7 @@ MEMBER:
 
 [Youtube link](https://youtu.be/bJ_DU4PlMAM?si=h-fyUrNXGV23Kbb6)
 
-[Presentation Slide](https://github.com/limlining/Nasa-Interim/blob/main/INTERIM_Final_Revised_Presentation.pdf)
+[Presentation Slide](https://github.com/limlining/Nasa-Interim/blob/main/INTERIM_TEAM%20A%2B%2B.pdf)
 
 [GitHub Repository](https://github.com/limlining/Nasa-Interim)
 
