@@ -17,7 +17,7 @@ MEMBER:
 
 [LiveDemo](https://limlining.github.io/Nasa-Interim/) 
 
-[Youtube link](https://youtu.be/bJ_DU4PlMAM?si=nJdkrnjRH7iDIdBY)
+[Youtube link](https://www.youtube.com/watch?si=j7b7R1dpowJ64uDZ&v=e07wOKfYuDE&feature=youtu.be)
 
 [Presentation Slide](https://github.com/limlining/Nasa-Interim/blob/main/INTERIM_Slide_Demo_Team%20A%2B%2B.pdf)
 
