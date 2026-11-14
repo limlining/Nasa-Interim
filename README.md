@@ -1,11 +1,23 @@
-# INTERIM
+# GROUP NAME: A++
+MEMBER:
+
+1.LIM LI NING
+
+2.LIM LI JING
+
+3. YAP YING YI
+
+4. NG XUAN YEE
+
+
+# PROJECT NAME: INTERIM
 ### Astronaut Health Assessment and Decision-Making Simulator
 
 **Making health decisions when communication with Earth is delayed.**
 
 [LiveDemo](https://limlining.github.io/Nasa-Interim/) 
 
-[Youtube link]()
+[Youtube link](https://youtu.be/bJ_DU4PlMAM?si=h-fyUrNXGV23Kbb6)
 
 [Presentation Slide](https://github.com/limlining/Nasa-Interim/blob/main/INTERIM_Final_Revised_Presentation.pdf)
 
